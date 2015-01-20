@@ -6,6 +6,14 @@ local ResMgr            = require 'ResourceManager'
 local ObjectManager     = require 'ObjectManager'
 local GameState = class('GameState')
 
+
+-- Controllers
+local GamePadController = require 'components/GamePadController'
+local KeyboardController= require 'components/KeyboardController'
+
+-- AI
+local VokronAI          = require 'components/VokronAI'
+
 function GameState:initialize()
 
    self.hello = "yo gabba gabba"
@@ -37,26 +45,30 @@ function GameState:loadImages()
    self.resmgr:loadImg('img/stjerner.png','stjerner')
    --self.resmgr:loadImg('img/monster.png',"astroid")
    self.resmgr:loadImg('img/hit.png','hit')
+   self.resmgr:loadImg('img/crosshair.png','cross')
 end
+
+--[[
+   
+   minus point for at skyde lille astroide
+
+
+
+]]
 
 function GameState:startGame()
    self.objmgr:clear()
-   self:addPlayer()
-   self:addAIPlayer()
-   self:addAIPlayer()
-   self:addAIPlayer()
-   self:addAIPlayer()
-   self:addAIPlayer()
-   --self:addMultiEnemy(50)
+   self:addPlayer(GamePadController)
+   --self:addPlayer(VokronAI)
+   --self:addPlayer(VokronAI)
+   --self:addPlayer(VokronAI)
    self:addAstroids(5)
 end
 
 function GameState:update()
-  --[[ 
    if (#self.objmgr.players == 0 or #self.objmgr.astroids == 0)  and self.j:isGamepadDown("start") then
       self:startGame()
    end
-]]
    -- update
    self.objmgr:updateAll()
    
@@ -71,18 +83,18 @@ function GameState:draw()
 end
 
 
-function GameState:addPlayer()
+function GameState:addPlayer(controller)
    --self.player = self.factory:createPlayer(20,20,0)
    local w,h = love.graphics.getDimensions()
-   self.factory:createPlayer(math.random()*w,math.random()*h,0,true)
+   self.factory:createPlayer(math.random()*w,math.random()*h,0,controller)
 end
-
+--[[
 function GameState:addAIPlayer()
    --self.player = self.factory:createPlayer(20,20,0)
    local w,h = love.graphics.getDimensions()
    self.factory:createPlayer(math.random()*w,math.random()*h,0,false)
 end
-
+]]
 function GameState:addAstroids(n)
    for i = 1, n do
       local x,y,r,level,size

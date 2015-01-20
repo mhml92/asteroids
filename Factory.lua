@@ -7,9 +7,6 @@ local Collider          = require 'CollisionSystem/Collider'
 local Transformation    = require 'components/Transformation'
 local Graphics          = require 'components/Graphics'
 local DebugGraphics     = require 'components/DebugGraphics'
-local KeyboardController= require 'components/KeyboardController'
-local GamePadController = require 'components/GamePadController'
-local EnemyController   = require 'components/EnemyController'
 local Physics           = require 'components/Physics'
 local Weapon            = require 'components/Weapon'
 local ShotController    = require 'components/ShotController'
@@ -21,8 +18,7 @@ local ShotExit          = require 'components/ShotExit'
 local AstroidExit       = require 'components/AstroidExit'
 local PlayerExit        = require 'components/PlayerExit'
 local AstroidsGraphics  = require 'components/AstroidGraphics'
-local AI                = require 'components/AIController'
-
+local Crosshair         = require 'components/effects/crosshair'
 
 local Factory = class('Factory')
 
@@ -41,32 +37,25 @@ function Factory:getLayer(o,l)
    return (math.random()*l)+l
 end
 
-function Factory:createPlayer(x,y,r,playerControlled)
+function Factory:createPlayer(x,y,r,controller)
    local p = self:newGameObject()
-   
+  
+
    p.att["alive"] =  true
    p.att["health"] =  3
    p.att["damage"] =  1000
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
-
-   if playerControlled then 
-      if #love.joystick.getJoysticks() > 0 then 
-      p:addComponent(GamePadController:new())
-      else
-      p:addComponent(KeyboardController:new())
-      end
-   else
-      p:addComponent(AI:new(p))
-   end
-
+   
+   p:addComponent(controller:new(p))
    p:addComponent(Transformation:new(x,y,r))
    p:addComponent(CollisionSystem:new(p,Collider:new(18)))
    p:addComponent(Physics:new(26,10,0.98))
    p:addComponent(Graphics:new(self.rm:getImg("spaceship"),40))
-   p:addComponent(Weapon:new(30))
+   p:addComponent(Weapon:new(20))
    p:addComponent(PlayerExit:new()) 
    p:addComponent(ScreenFix:new())
+   p:addComponent(Crosshair:new(self.rm:getImg("cross")))
    p:addComponent(Exhaust:new(
       -15,
       0,

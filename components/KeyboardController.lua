@@ -2,8 +2,8 @@ local class = require 'middleclass'
 
 local KeyboardController = class('KeyboardController')
 
-function KeyboardController:initialize()
-
+function KeyboardController:initialize(p)
+   self.p = p
 end
 
 function KeyboardController:getType()

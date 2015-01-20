@@ -3,7 +3,7 @@ local class = require 'middleclass'
 local AIController = class('AIController')
 
 function AIController:initialize(p)
-	self.p = p
+   self.p = p
 	self.astroids = p.gs.objmgr.astroids
    self.players = p.gs.objmgr.players
    self.projectiles = p.gs.objmgr.projectiles

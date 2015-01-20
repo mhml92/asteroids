@@ -3,7 +3,8 @@ local class = require 'middleclass'
 local GamePadController = class('GamePadController')
 
 
-function GamePadController:initialize()
+function GamePadController:initialize(p)
+   self.p = p
    local joysticks = love.joystick.getJoysticks()
    self.j = joysticks[1]
 end
@@ -21,9 +22,7 @@ end
 
 function GamePadController:isShooting()
    if self.shootDir.x ~= 0 or self.shootDir.y ~= 0 then
-      return true
-   else
-      return false
+      return self.j:isGamepadDown("rightshoulder");
    end
 end
 

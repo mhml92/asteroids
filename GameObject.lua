@@ -74,7 +74,6 @@ function GameObject:addComponent(comp)
    
    if comp:getType() == 'Effect' then
       table.insert(self.drawList,comp)
-      return
    end
    
    table.insert(self.components, comp)
