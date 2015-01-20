@@ -42,12 +42,11 @@ end
 function GameState:startGame()
    self.objmgr:clear()
    self:addPlayer()
-   self:addPlayer()
-   self:addPlayer()
-   self:addPlayer()
-   self:addPlayer()
-   self:addPlayer()
-   self:addPlayer()
+   self:addAIPlayer()
+   self:addAIPlayer()
+   self:addAIPlayer()
+   self:addAIPlayer()
+   self:addAIPlayer()
    --self:addMultiEnemy(50)
    self:addAstroids(5)
 end
@@ -75,7 +74,13 @@ end
 function GameState:addPlayer()
    --self.player = self.factory:createPlayer(20,20,0)
    local w,h = love.graphics.getDimensions()
-   self.factory:createPlayer(math.random()*w,math.random()*h,0)
+   self.factory:createPlayer(math.random()*w,math.random()*h,0,true)
+end
+
+function GameState:addAIPlayer()
+   --self.player = self.factory:createPlayer(20,20,0)
+   local w,h = love.graphics.getDimensions()
+   self.factory:createPlayer(math.random()*w,math.random()*h,0,false)
 end
 
 function GameState:addAstroids(n)

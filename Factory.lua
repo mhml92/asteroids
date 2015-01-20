@@ -41,22 +41,24 @@ function Factory:getLayer(o,l)
    return (math.random()*l)+l
 end
 
-function Factory:createPlayer(x,y,r)
+function Factory:createPlayer(x,y,r,playerControlled)
    local p = self:newGameObject()
    
    p.att["alive"] =  true
-   p.att["health"] =  100
+   p.att["health"] =  3
+   p.att["damage"] =  1000
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
 
-   p:addComponent(AI:new(p))
-   --[[
-   if #love.joystick.getJoysticks() > 0 then 
+   if playerControlled then 
+      if #love.joystick.getJoysticks() > 0 then 
       p:addComponent(GamePadController:new())
-   else
+      else
       p:addComponent(KeyboardController:new())
+      end
+   else
+      p:addComponent(AI:new(p))
    end
-   ]]
 
    p:addComponent(Transformation:new(x,y,r))
    p:addComponent(CollisionSystem:new(p,Collider:new(18)))
