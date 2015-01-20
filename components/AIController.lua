@@ -6,6 +6,7 @@ function AIController:initialize(p)
 	self.p = p
 	self.astroids = p.gs.objmgr.astroids
    self.players = p.gs.objmgr.players
+   self.projectiles = p.gs.objmgr.projectiles
 end
 
 function AIController:getType()
@@ -25,12 +26,17 @@ end
 function AIController:getMoveDir()
    local apos = self:getMostDangerousPos(false)
    local dir = {}
-   if apos.dist < 200 then
+   if apos.dist < 200 or (apos.play and apos.dist < 700 and #self.astroids > 0) then
       dir.x = (apos.x - self.p.trans.x) * -1
       dir.y = (apos.y - self.p.trans.y) * -1
    else
       dir.x = (apos.x - self.p.trans.x)
       dir.y = (apos.y - self.p.trans.y)
+   end
+   
+   if apos.proj then
+      dir.x = (apos.y - self.p.trans.y)
+      dir.y = (apos.x - self.p.trans.x) * -1
    end
    
    --move
@@ -56,7 +62,9 @@ function AIController:getMostDangerousPos(b)
    local pos = {}
    pos.x = 0
    pos.y = 0
-   pos.dis = 0
+   pos.dist = 0
+   pos.proj = false
+   pos.play = false
    
    local cb = 30000
    
@@ -96,6 +104,8 @@ function AIController:getMostDangerousPos(b)
             pos.dist = dist
             pos.x = pos.x + self.astroids[i].physics.vel.x * self.astroids[i].physics.speed * 2
             pos.y = pos.y + self.astroids[i].physics.vel.y * self.astroids[i].physics.speed * 2
+            pos.play = false
+            pos.proj = false
          else
             pos.x = ox
             pos.y = oy
@@ -104,6 +114,8 @@ function AIController:getMostDangerousPos(b)
          if cb > dist then
             cb = dist
             pos.dist = dist
+            pos.play = false
+            pos.proj = false
          else
             pos.x = ox
             pos.y = oy
@@ -148,6 +160,8 @@ function AIController:getMostDangerousPos(b)
                pos.dist = dist
                pos.x = pos.x + self.players[i].physics.vel.x/self.players[i].physics.mass * 2
                pos.y = pos.y + self.players[i].physics.vel.y/self.players[i].physics.mass * 2
+               pos.play = true
+               pos.proj = false
             else
                pos.x = ox
                pos.y = oy
@@ -156,6 +170,8 @@ function AIController:getMostDangerousPos(b)
             if cb > dist then
                cb = dist
                pos.dist = dist
+               pos.play = true
+               pos.proj = false
             else
                pos.x = ox
                pos.y = oy
@@ -164,8 +180,49 @@ function AIController:getMostDangerousPos(b)
       end
    end
    
-   if pos.dist == nil then
-      pos.dist = 0
+   for i = 1, #self.projectiles do
+      if not b and self.projectiles[i].owner ~= self.p.id then
+         local ox = pos.x
+         local oy = pos.y
+         local x1 = self.projectiles[i].trans.x - w
+         local x2 = self.projectiles[i].trans.x
+         local x3 = self.projectiles[i].trans.x + w
+         local y1 = self.projectiles[i].trans.y - h
+         local y2 = self.projectiles[i].trans.y
+         local y3 = self.projectiles[i].trans.y + h
+         if math.abs(self.p.trans.x - x2) < math.abs(self.p.trans.x - x3) then
+            if math.abs(self.p.trans.x - x1) < math.abs(self.p.trans.x - x2) then
+               pos.x = x1
+            else
+               pos.x = x2
+            end
+         else
+            pos.x = x3
+         end
+         
+         if math.abs(self.p.trans.y - y2) < math.abs(self.p.trans.y - y3) then
+            if math.abs(self.p.trans.y - y1) < math.abs(self.p.trans.y - y2) then
+               pos.y = y1
+            else
+               pos.y = y2
+            end
+         else
+            pos.y = y3
+         end
+         
+         local dist = math.sqrt(math.pow(self.p.trans.x - pos.x,2)+math.pow(self.p.trans.y - pos.y,2))
+         if cb > dist + 50 and dist < 300 then
+            cb = dist + 50
+            pos.dist = dist
+            --pos.x = pos.x + self.projectiles[i].physics.vel.x * self.projectiles[i].physics.speed * 2
+            --pos.y = pos.y + self.projectiles[i].physics.vel.y * self.projectiles[i].physics.speed * 2
+            pos.play = false
+            pos.proj = true
+         else
+            pos.x = ox
+            pos.y = oy
+         end
+      end
    end
    
    return pos
