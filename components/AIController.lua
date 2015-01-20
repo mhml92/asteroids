@@ -5,7 +5,6 @@ local AIController = class('AIController')
 function AIController:initialize(p)
 	self.p = p
 	self.astroids = p.gs.objmgr.astroids
-   self.players = p.gs.objmgr.players 
 end
 
 function AIController:getType()
@@ -23,7 +22,7 @@ function AIController:isShooting()
 end
 
 function AIController:getMoveDir()
-   local apos = self:getMostDangerousPos()
+   local apos = self:getMostDangerousPos(false)
    local dir = {}
    if apos.dist < 200 then
       dir.x = (apos.x - self.p.trans.x) * -1
@@ -43,7 +42,7 @@ function AIController:getMoveDir()
 end
 
 function AIController:getShootDir()
-   local apos = self:getMostDangerousPos()
+   local apos = self:getMostDangerousPos(true)
    local dir = {}
    dir.x = apos.x - self.p.trans.x
    dir.y = apos.y - self.p.trans.y
@@ -51,14 +50,14 @@ function AIController:getShootDir()
    return dir  
 end
 
-function AIController:getMostDangerousPos()
+function AIController:getMostDangerousPos(b)
    local w,h = love.graphics.getDimensions()
    local pos = {}
    pos.x = 0
    pos.y = 0
    pos.dis = 0
    
-   local cb = 3000
+   local cb = 30000
    
    for i = 1, #self.astroids,1 do
       local ox = pos.x
@@ -90,13 +89,24 @@ function AIController:getMostDangerousPos()
       end
       
       local dist = math.sqrt(math.pow(self.p.trans.x - pos.x,2)+math.pow(self.p.trans.y - pos.y,2))
-      
-      if cb > dist then
-         cb = dist
-         pos.dist = dist
+      if b then
+         if cb > dist + self.astroids[i].att["size"] * 20 and dist < 300 then
+            cb = dist + self.astroids[i].att["size"] * 20
+            pos.dist = dist
+            pos.x = pos.x + self.astroids[i].physics.vel.x * self.astroids[i].physics.speed * 2
+            pos.y = pos.y + self.astroids[i].physics.vel.y * self.astroids[i].physics.speed * 2
+         else
+            pos.x = ox
+            pos.y = oy
+         end
       else
-         pos.x = ox
-         pos.y = oy
+         if cb > dist then
+            cb = dist
+            pos.dist = dist
+         else
+            pos.x = ox
+            pos.y = oy
+         end
       end
    end
    
