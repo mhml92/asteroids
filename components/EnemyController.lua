@@ -23,7 +23,7 @@ function EnemyController:isShooting()
 end
 
 function EnemyController:getMoveDir(p)
-   local playerPos = p.gs.gameObjects[1].trans
+   local playerPos = p.gs.objmgr.players[1].trans--gameObjects[1].trans
    local myPos = p.trans
    local dir = {}
    dir.x = playerPos.x - myPos.x

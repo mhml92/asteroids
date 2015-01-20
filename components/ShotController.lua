@@ -3,22 +3,22 @@ local class = require 'middleclass'
 local ShotController = class('ShotController')
 
 
-function ShotController:initialize()
+function ShotController:initialize(r)
+   self.moveDir = self:getMoveDir(r)
 end
 
 function ShotController:getType()
    return 'Controller'
 end
 
-function ShotController:update(p) 
-   self.moveDir = self:getMoveDir(p)
+function ShotController:update() 
 end
 
-function ShotController:getMoveDir(p)
+
+function ShotController:getMoveDir(r)
    local dir = {}
-   dir.x = math.cos(p.trans.r) 
-   dir.y = math.sin(p.trans.r) 
+   dir.x = math.cos(r)
+   dir.y = math.sin(r)
    return dir  
 end
-
 return ShotController

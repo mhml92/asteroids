@@ -1,21 +1,23 @@
 local class = require 'middleclass'
 
-local Graphics = class('Graphics')
+local AstroidsGraphics = class('Graphics')
 
-function Graphics:initialize(img, scale)
+function AstroidsGraphics:initialize(img, scale)
    self.img = img
-
+   self.r = math.random()* 2*math.pi
+   self.spin = (math.random() * 1/(180*math.pi))-(1/2 *1/180*math.pi)
    -- scale == width in px
    self.scale = scale/img:getWidth()
 end
 
-function Graphics:getType()
+function AstroidsGraphics:getType()
    return 'Graphics'
 end
 
-function Graphics:draw(p)
+function AstroidsGraphics:draw(p)
    love.graphics.setColor(255,255,255)
-   love.graphics.draw(self.img, p.trans.x, p.trans.y, p.trans.r+((1/2)*math.pi), self.scale, self.scale, self.img:getWidth()/2, self.img:getHeight()/2, 0, 0 )
+   self.r = self.r + self.spin
+   love.graphics.draw(self.img, p.trans.x, p.trans.y, self.r, self.scale, self.scale, self.img:getWidth()/2, self.img:getHeight()/2, 0, 0 )
    --[[
    love.graphics.setColor(255,255,255,128)
    love.graphics.line(p.trans.x,p.trans.y,p.trans.x+p.physics.vel.x,p.trans.y)
@@ -30,4 +32,4 @@ function Graphics:draw(p)
    ]]
 end
 
-return Graphics
+return AstroidsGraphics

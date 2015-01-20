@@ -14,7 +14,7 @@ function TimeToLive:update(p)
    
    self.lifeTime = self.lifeTime - 1
    if self.lifeTime <= 0 then
-      p.isAlive = false --gs.factory:destroy(p.id)
+      p.att["alive"] = false
    end
 end
 

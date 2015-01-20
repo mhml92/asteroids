@@ -13,7 +13,7 @@ function Exhaust:initialize(rx,ry,img,buf,er,plt,spread)
    self.rx = rx
    self.ry = ry
    self.ps:setEmissionRate(er)
-   self.ps:setSizes(0.03)
+   self.ps:setSizes(0.04)
    self.ps:setParticleLifetime(plt/2,plt)
    self.ps:setSpread(spread)
    self.ps:pause()
@@ -24,7 +24,6 @@ function Exhaust:getType()
 end   
 
 function Exhaust:update(p)
-   dt = 1/60
    self.ps:setSpeed(p.physics.force*p.physics.mass*0.8,p.physics.force*p.physics.mass)
 
    
@@ -39,7 +38,7 @@ function Exhaust:update(p)
       self.ps:pause()
    end
 
-   self.ps:update(dt)
+   self.ps:update(1/60)
 end
 
 function Exhaust:draw(p)

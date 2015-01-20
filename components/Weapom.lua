@@ -22,8 +22,14 @@ function Weapon:update(p)
       t.x = p.trans.x-- + 25 * math.cos(t.r)
       t.y = p.trans.y-- + 25 * math.sin(t.r)
       for i = 1,1,1 do
-         local s = p.gs.factory:createShot(t.x,t.y,t.r+(math.random()-0.5)*0.5)
-         table.insert(p.gs.gameObjects,s)
+         p.gs.factory:createProjectile(
+            t.x,
+            t.y,
+            t.r,
+            1, -- damage
+            p.gs.resmgr:getImg("fire"), --sprite
+            20, -- size
+            p.id) -- owner
       end
    end
 end
