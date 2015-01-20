@@ -5,6 +5,7 @@ local AIController = class('AIController')
 function AIController:initialize(p)
 	self.p = p
 	self.astroids = p.gs.objmgr.astroids
+   self.players = p.gs.objmgr.players
 end
 
 function AIController:getType()
@@ -59,7 +60,7 @@ function AIController:getMostDangerousPos(b)
    
    local cb = 30000
    
-   for i = 1, #self.astroids,1 do
+   for i = 1, #self.astroids do
       local ox = pos.x
       local oy = pos.y
       local x1 = self.astroids[i].trans.x - w
@@ -108,6 +109,63 @@ function AIController:getMostDangerousPos(b)
             pos.y = oy
          end
       end
+   end
+   
+   for i = 1, #self.players do
+      if self.p.id ~= self.players[i].id then
+         local ox = pos.x
+         local oy = pos.y
+         local x1 = self.players[i].trans.x - w
+         local x2 = self.players[i].trans.x
+         local x3 = self.players[i].trans.x + w
+         local y1 = self.players[i].trans.y - h
+         local y2 = self.players[i].trans.y
+         local y3 = self.players[i].trans.y + h
+         if math.abs(self.p.trans.x - x2) < math.abs(self.p.trans.x - x3) then
+            if math.abs(self.p.trans.x - x1) < math.abs(self.p.trans.x - x2) then
+               pos.x = x1
+            else
+               pos.x = x2
+            end
+         else
+            pos.x = x3
+         end
+         
+         if math.abs(self.p.trans.y - y2) < math.abs(self.p.trans.y - y3) then
+            if math.abs(self.p.trans.y - y1) < math.abs(self.p.trans.y - y2) then
+               pos.y = y1
+            else
+               pos.y = y2
+            end
+         else
+            pos.y = y3
+         end
+         
+         local dist = math.sqrt(math.pow(self.p.trans.x - pos.x,2)+math.pow(self.p.trans.y - pos.y,2))
+         if b then
+            if cb > dist + self.players[i].att["health"] * 2 and dist < 300 then
+               cb = dist + self.players[i].att["health"] * 2
+               pos.dist = dist
+               pos.x = pos.x + self.players[i].physics.vel.x/self.players[i].physics.mass * 2
+               pos.y = pos.y + self.players[i].physics.vel.y/self.players[i].physics.mass * 2
+            else
+               pos.x = ox
+               pos.y = oy
+            end
+         else
+            if cb > dist then
+               cb = dist
+               pos.dist = dist
+            else
+               pos.x = ox
+               pos.y = oy
+            end
+         end
+      end
+   end
+   
+   if pos.dist == nil then
+      pos.dist = 0
    end
    
    return pos
