@@ -8,7 +8,7 @@ end
 
 function AstroidExit:update(p) 
    local r = p.trans.r+(((math.random()*2)-1)*math.pi/2)
-   local health = p.att["startHealth"]-1
+   local health = p.att["startHealth"]
    if self.level > 1 then
       for i = 1, 2 do
          p.gs.factory:createAstroid(

@@ -49,7 +49,7 @@ function GameState:startGame()
    self:addPlayer()
    self:addPlayer()
    --self:addMultiEnemy(50)
-   self:addAstroids(13)
+   self:addAstroids(5)
 end
 
 function GameState:update()
@@ -87,7 +87,7 @@ function GameState:addAstroids(n)
       r = math.random()*2*math.pi
       size = 100
       level = 6
-      self.factory:createAstroid(x,y,r,size,10,level)
+      self.factory:createAstroid(x,y,r,size,1,level)
    end
 end
 

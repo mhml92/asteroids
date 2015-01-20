@@ -1,8 +1,9 @@
 local class = require 'middleclass'
 local Weapon = class('Weapon')
 
-function Weapon:initialize()
-
+function Weapon:initialize(coolDown)
+   self.coolDown = coolDown
+   self.temp = 0
 end
 
 function Weapon:getType()
@@ -12,7 +13,11 @@ end
 function Weapon:update(p)
    local t = {}
    t.r = 0
-   if p.controller.shooting then
+   if self.temp > 0 then 
+      self.temp = self.temp -1 
+   end
+   if p.controller.shooting and self.temp == 0 then
+      self.temp = self.coolDown 
       local mx = 0
       local my = 0
 
