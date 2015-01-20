@@ -75,7 +75,7 @@ end
 function ObjectManager:insert(o)
   
    if o.att["type"] == "projectile" then
-      table.insert(self.projectile,o)
+      table.insert(self.projectiles,o)
    end
 
    if o.att["type"] == "player"  then
