@@ -62,7 +62,7 @@ function Factory:createPlayer(x,y,r)
    p:addComponent(CollisionSystem:new(p,Collider:new(18)))
    p:addComponent(Physics:new(26,10,0.98))
    p:addComponent(Graphics:new(self.rm:getImg("spaceship"),40))
-   p:addComponent(Weapon:new(10))
+   p:addComponent(Weapon:new(30))
    p:addComponent(PlayerExit:new()) 
    p:addComponent(ScreenFix:new())
    p:addComponent(Exhaust:new(
