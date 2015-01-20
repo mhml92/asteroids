@@ -8,6 +8,7 @@ function ObjectManager:initialize(gs)
    self.gameObjects = {}
    self.players = {}
    self.astroids = {}
+   self.projectiles = {}
 end
 
 function ObjectManager:clear()
@@ -72,7 +73,11 @@ function ObjectManager:hasOwnership(go1,go2)
 end
 
 function ObjectManager:insert(o)
-   
+  
+   if o.att["type"] == "projectile" then
+      table.insert(self.projectile,o)
+   end
+
    if o.att["type"] == "player"  then
       table.insert(self.players,o)
    end
@@ -85,6 +90,13 @@ function ObjectManager:insert(o)
 end
 
 function ObjectManager:destroy(i)
+   if self.gameObjects[i].att["type"] == "projectile" then
+      for j = #self.projectiles, 1,-1 do
+         if self.projectiles[j].id == self.gameObjects[i].id then
+            table.remove(self.projectiles,j)
+         end
+      end
+   end
    
    if self.gameObjects[i].att["type"] == "astroid" then
       for j = #self.astroids, 1,-1 do
