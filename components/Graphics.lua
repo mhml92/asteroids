@@ -2,7 +2,9 @@ local class = require 'middleclass'
 
 local Graphics = class('Graphics')
 
-function Graphics:initialize(img, scale)
+function Graphics:initialize(p,img, scale)
+   local id = p.id
+   self.r,self.g,self.b = (math.random()*255),math.random()*255,math.random()*255 
    self.img = img
 
    -- scale == width in px
@@ -14,8 +16,8 @@ function Graphics:getType()
 end
 
 function Graphics:draw(p)
-   love.graphics.setColor(255,255,255)
    love.graphics.draw(self.img, p.trans.x, p.trans.y, p.trans.r+((1/2)*math.pi), self.scale, self.scale, self.img:getWidth()/2, self.img:getHeight()/2, 0, 0 )
+   --love.graphics.setColor(255,255,255)
    --[[
    love.graphics.setColor(255,255,255,128)
    love.graphics.line(p.trans.x,p.trans.y,p.trans.x+p.physics.vel.x,p.trans.y)

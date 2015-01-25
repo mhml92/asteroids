@@ -14,7 +14,7 @@ function Exhaust:initialize(rx,ry,img,buf,er,plt,spread)
    self.ry = ry
    self.ps:setEmissionRate(er)
    self.ps:setSizes(0.04)
-   self.ps:setParticleLifetime(plt/2,plt)
+   self.ps:setParticleLifetime(plt-(plt/10),plt)
    self.ps:setSpread(spread)
    self.ps:pause()
 end

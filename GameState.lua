@@ -13,10 +13,15 @@ local KeyboardController= require 'components/KeyboardController'
 
 -- AI
 local VokronAI          = require 'components/VokronAI'
+local SOSAI             = require 'components/EnemyController'
 
 function GameState:initialize()
 
    self.hello = "yo gabba gabba"
+   
+   self.world = love.physics.newWorld(0,0,true)
+   love.physics.setMeter(16)
+
    self.resmgr = ResMgr:new(self)
    self.objmgr = ObjectManager:new(self)
    self.factory = Factory:new(self,self.resmgr)
@@ -28,8 +33,8 @@ function GameState:initialize()
    
    -- TEST
 
-   local joysticks = love.joystick.getJoysticks()
-   self.j = joysticks[1]
+   --local joysticks = love.joystick.getJoysticks()
+   --self.j = joysticks[1]
 
 end
 
@@ -60,20 +65,22 @@ function GameState:startGame()
    self.objmgr:clear()
    self:addPlayer(GamePadController)
    --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
-   self:addAstroids(5)
+   self:addEnemy(SOSAI)
+   --self:addAstroids(5)
 end
 
-function GameState:update()
+function GameState:update(dt)
+   self.world:update(dt)
+   --[[
    if (#self.objmgr.players == 0 or #self.objmgr.astroids == 0)  and self.j:isGamepadDown("start") then
       self:startGame()
    end
+   ]]
    -- update
    self.objmgr:updateAll()
    
    --collision
-   self.objmgr:checkCollisions()
+   --self.objmgr:checkCollisions()
 end
 
 
@@ -116,8 +123,9 @@ function GameState:addMultiEnemy(n)
    end
 end
 
-function GameState:addEnemy()
-   self.factory:createEnemy(800,600,0,40)
+function GameState:addEnemy(controller)
+   local w,h = love.graphics.getDimensions()
+   self.factory:createEnemy(math.random()*w,math.random()*h,0,controller)
 end
 
 function GameState:addBackground()

@@ -4,6 +4,7 @@ local GameObject        = require 'GameObject'
 local CollisionSystem   = require 'CollisionSystem/CollisionSystem'
 local Collider          = require 'CollisionSystem/Collider'
 
+local LovePhysics       = require 'components/LovePhysics'
 local Transformation    = require 'components/Transformation'
 local Graphics          = require 'components/Graphics'
 local DebugGraphics     = require 'components/DebugGraphics'
@@ -13,6 +14,7 @@ local ShotController    = require 'components/ShotController'
 local TimeToLive        = require 'components/TimeToLive'
 local ConstSpeed        = require 'components/ConstSpeed'
 local ScreenFix         = require 'components/ScreenFix'
+local LovePhysicsScreenFix         = require 'components/LovePhysicsScreenFix'
 local Exhaust           = require 'components/effects/Exhaust'
 local ShotExit          = require 'components/ShotExit'
 local AstroidExit       = require 'components/AstroidExit'
@@ -27,6 +29,7 @@ function Factory:initialize(gs,rm)
    self.rm = rm
    self.id = 0
    self.layers = {}
+   self.layers.depth = 100
    self.layers.player = 300
    self.layers.default  = 100
    self.layers.background = 0
@@ -34,7 +37,7 @@ function Factory:initialize(gs,rm)
 end
 
 function Factory:getLayer(o,l)
-   return (math.random()*l)+l
+   return (math.random()*self.layers.depth)+l
 end
 
 function Factory:createPlayer(x,y,r,controller)
@@ -42,52 +45,62 @@ function Factory:createPlayer(x,y,r,controller)
   
 
    p.att["alive"] =  true
-   p.att["health"] =  3
+   p.att["health"] =  300
    p.att["damage"] =  1000
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
    
    p:addComponent(controller:new(p))
    p:addComponent(Transformation:new(x,y,r))
-   p:addComponent(CollisionSystem:new(p,Collider:new(18)))
-   p:addComponent(Physics:new(26,10,0.98))
-   p:addComponent(Graphics:new(self.rm:getImg("spaceship"),40))
+   --p:addComponent(CollisionSystem:new(p,Collider:new(18)))
+   
+   --p:addComponent(Physics:new(50,10,0.99))
+   
+   -- PARENT, MASS, FORCE, SIZE(radius)
+   p:addComponent(LovePhysics:new(p,100,100000,18))
+   
+   p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),40))
    p:addComponent(Weapon:new(20))
    p:addComponent(PlayerExit:new()) 
-   p:addComponent(ScreenFix:new())
+   p:addComponent(LovePhysicsScreenFix:new())
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
-   p:addComponent(Exhaust:new(
+   --[[p:addComponent(Exhaust:new(
       -15,
       0,
       self.rm:getImg("fire"),
-      500,
       200,
+      100,
       0.02,
       math.pi/4)
    )
+   ]]
    self:insert(p)
 end
 
---[[
-function Factory:createEnemy(x,y,r,size)
-   local e = self:newGameObject()
+function Factory:createEnemy(x,y,r,controller)
+   local p = self:newGameObject()
+  
+
+   p.att["alive"] =  true
+   p.att["health"] =  300
+   p.att["damage"] =  1000
+   p.att["type"] =  "SOS" --Sack Of Shit
+   p.att["layer"] = self:getLayer(p,self.layers.player)
    
-   e.att["alive"] = true
-   e.att["health"] =  10
-   e.att["rigidbody"] = 0.2
-   e.att["type"] = "enemy"
-   e.att["layer"] = self.layers.default
-   e:addComponent(Transformation:new(x,y,r))
-   e:addComponent(CollisionSystem:new(e,Collider:new((size/2))))
-   e:addComponent(EnemyController:new())
-   -- mass/force/friction
-   e:addComponent(Physics:new(25,10,0.98))
+   p:addComponent(controller:new(p))
+   p:addComponent(Transformation:new(x,y,r))
+   --p:addComponent(CollisionSystem:new(p,Collider:new(18)))
    
-   --e:addComponent(Graphics:new(self.rm:getImg("booger"),size))
-   e:addComponent(DebugGraphics:new(0,0,255))
-   self:insert(e)
+   --p:addComponent(Physics:new(50,10,0.99))
+   
+   -- PARENT, MASS, FORCE, SIZE(radius)
+   p:addComponent(LovePhysics:new(p,100,100000,18))
+   
+   p:addComponent(Graphics:new(p,self.rm:getImg("booger"),40))
+   p:addComponent(PlayerExit:new()) 
+   p:addComponent(LovePhysicsScreenFix:new())
+   self:insert(p)
 end
-]]
 
 function Factory:createAstroid(x,y,r,size,health,level)
    local s = self:newGameObject()
@@ -136,7 +149,7 @@ function Factory:createProjectile(x,y,r,damage,img,size, owner)
    s:addComponent(CollisionSystem:new(s,Collider:new(size/2)))
    s:addComponent(ConstSpeed:new(20))
    s:addComponent(ScreenFix:new())
-   s:addComponent(Graphics:new(img,size))
+   s:addComponent(Graphics:new(s,img,size))
    --s:addComponent(DebugGraphics:new(0,255,0))
    s:addComponent(TimeToLive:new(15))
    s:addComponent(ShotExit:new())
@@ -150,7 +163,7 @@ function Factory:createHit(x,y,r,img,size,time)
    s.att["alive"] = true
    s.att["type"] = "effect" 
    s:addComponent(Transformation:new(x,y,r))
-   s:addComponent(Graphics:new(img,size))
+   s:addComponent(Graphics:new(s,img,size))
    s:addComponent(TimeToLive:new(time))
    s.att["layer"] = self:getLayer(s,self.layers.hit)
    self:insert(s) 

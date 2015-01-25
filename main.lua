@@ -16,7 +16,7 @@ function love.update(dt)
    time.accum = time.accum + dt 
 
    while time.accum >= time.fdt do
-      gs:update()
+      gs:update(time.fdt)
 
       if love.keyboard.isDown('escape') then
          love.event.quit()
