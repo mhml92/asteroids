@@ -1,9 +1,10 @@
 local class             = require 'middleclass'
 local Factory           = require 'Factory'
 local GameObject        = require 'GameObject'
-local CollisionUtil     = require 'CollisionSystem/CollisionUtil'
+--local CollisionUtil     = require 'CollisionSystem/CollisionUtil'
 local ResMgr            = require 'ResourceManager'
 local ObjectManager     = require 'ObjectManager'
+
 local GameState = class('GameState')
 
 
@@ -13,6 +14,7 @@ local KeyboardController= require 'components/KeyboardController'
 
 -- AI
 local VokronAI          = require 'components/VokronAI'
+local VokronAIalt          = require 'components/VokronAI-alt'
 local SOSAI             = require 'components/EnemyController'
 
 function GameState:initialize()
@@ -22,7 +24,7 @@ function GameState:initialize()
    self.resmgr = ResMgr:new(self)
    self.objmgr = ObjectManager:new(self)
    self.factory = Factory:new(self,self.resmgr)
-   self.colutil = CollisionUtil:new(self)
+   --self.colutil = CollisionUtil:new(self)
    
    self.world = love.physics.newWorld(0,0,true)
    self.world:setCallbacks(
@@ -39,19 +41,20 @@ end
 function GameState:startGame()
    self.objmgr:clear()
    self:addPlayer(GamePadController)
-   self:addPlayer(VokronAI)
-   self:addPlayer(VokronAI)
-   self:addPlayer(VokronAI)
-   self:addPlayer(VokronAI)
-   self:addPlayer(VokronAI)
-   self:addPlayer(VokronAI)
+   --self:addPlayer(KeyboardController)
+   --self:addPlayer(VokronAIalt)
+   --self:addPlayer(VokronAIalt)
+   --self:addPlayer(VokronAIalt)
+   --self:addPlayer(VokronAIalt)
    --self:addPlayer(VokronAI)
-  --[[
-   for i = 1,1 do
-      self:addEnemy(SOSAI)
+   --self:addPlayer(VokronAI)
+   --self:addPlayer(VokronAI)
+   --self:addPlayer(VokronAI)
+   --self:addPlayer(VokronAI)
+   for i = 1,3 do
+   --   self:addEnemy(SOSAI)
    end
-   ]]
-   self:addAstroids(5)
+   self:addAstroids(6)
 end
 
 function GameState:loadImages()

@@ -1,17 +1,17 @@
 local class = require 'middleclass'
-local Weapon = class('Weapon')
+local BasicWeapon = class('BasicWeapon')
 
-function Weapon:initialize(coolDown,force)
+function BasicWeapon:initialize(coolDown,force)
    self.coolDown = coolDown
    self.force = force
    self.temp = 0
 end
 
-function Weapon:getType()
+function BasicWeapon:getType()
    return 'Weapon'
 end
 
-function Weapon:update(p)
+function BasicWeapon:update(p)
    local t = {}
    t.r = 0
    if self.temp > 0 then 
@@ -32,18 +32,18 @@ function Weapon:update(p)
          t.x = p.trans.x-- + 25 * math.cos(t.r)
          t.y = p.trans.y-- + 25 * math.sin(t.r)
          
-         --for i = 1,1,1 do
+         --for i = 1,5 do
          p.gs.factory:createProjectile(
             t.x,
             t.y,
-            t.r,
-            1, -- damage
+            t.r+(math.random()-0.5)*math.pi/16,
+            10, -- damage
             p.gs.resmgr:getImg("fire"), --sprite
             20, -- size
             p.id) -- owner
-         --end o
+         --end 
          p.physics:applyLinearImpulse(self.force*t.ix,self.force*t.iy)
       end
    end
 end
-return Weapon
+return BasicWeapon

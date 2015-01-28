@@ -3,7 +3,6 @@ math.random = love.math.random
 local class       = require 'middleclass'
 local GameState   = require 'GameState'
 
-
 local time = {}
 time.fdt = 1/60 --fixed delta time
 time.accum = 0

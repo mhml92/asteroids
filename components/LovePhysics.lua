@@ -17,7 +17,7 @@ function LovePhysics:initialize(p,mass,force,radius,ldamping)
    self.body:resetMassData()
    self.body:setMass(self.mass)
 
-   self.body:setLinearDamping(self.ldamping)
+   --self.body:setLinearDamping(self.ldamping)
 end
 
 function LovePhysics:getType()
@@ -35,8 +35,10 @@ function LovePhysics:update()
          mx = p.controller.moveDir.x
          my = p.controller.moveDir.y
          len = math.sqrt(mx^2+my^2)
-         mx = mx/len
-         my = my/len
+         if len > 1 then
+            mx = mx/len
+            my = my/len
+         end
          self.body:applyForce(mx * self.force, my * self.force)
       end
    end

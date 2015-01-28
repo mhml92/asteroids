@@ -1,8 +1,6 @@
 local class                   = require 'middleclass'
 
 local GameObject              = require 'GameObject'
---local CollisionSystem         = require 'CollisionSystem/CollisionSystem'
---local Collider                = require 'CollisionSystem/Collider'
 local Collision               = require 'components/Collision'
 local LovePhysics             = require 'components/LovePhysics'
 local LoveProjectilePhysics   = require 'components/LoveProjectilePhysics'
@@ -10,19 +8,18 @@ local LoveAsteroidPhysics     = require 'components/LoveAsteroidPhysics'
 
 local Transformation          = require 'components/Transformation'
 local Graphics                = require 'components/Graphics'
---local DebugGraphics           = require 'components/DebugGraphics'
---local Physics                 = require 'components/Physics'
-local Weapon                  = require 'components/Weapon'
+
+-- WEAPONS
+local BasicWeapon             = require 'components/weapons/BasicWeapon'
+local Shotgun                 = require 'components/weapons/Shotgun'
+
 local ShotController          = require 'components/ShotController'
 local TimeToLive              = require 'components/TimeToLive'
---local ConstSpeed              = require 'components/ConstSpeed'
-local ScreenFix               = require 'components/ScreenFix'
-local LovePhysicsScreenFix         = require 'components/LovePhysicsScreenFix'
+local LovePhysicsScreenFix    = require 'components/LovePhysicsScreenFix'
 local Exhaust                 = require 'components/effects/Exhaust'
 local ShotExit                = require 'components/ShotExit'
 local AstroidExit             = require 'components/AstroidExit'
 local PlayerExit              = require 'components/PlayerExit'
---local AstroidsGraphics        = require 'components/AstroidGraphics'
 local Crosshair               = require 'components/effects/crosshair'
 
 local Factory = class('Factory')
@@ -47,7 +44,7 @@ function Factory:createPlayer(x,y,r,controller)
 
    p.att["alive"] =  true
    p.att["health"] =  300
-   p.att["damage"] =  1000
+   p.att["damage"] =  10
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
    
@@ -64,20 +61,20 @@ function Factory:createPlayer(x,y,r,controller)
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),40))
 
    -- COOLDOWN, FORCE
-   p:addComponent(Weapon:new(20,100))
+   --p:addComponent(BasicWeapon:new(20,500))
+   p:addComponent(Shotgun:new(40,5*500))
    p:addComponent(PlayerExit:new()) 
    p:addComponent(LovePhysicsScreenFix:new(p,0))
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
-   --[[p:addComponent(Exhaust:new(
+   p:addComponent(Exhaust:new(
       -15,
       0,
       self.rm:getImg("fire"),
-      200,
+      1000,
       100,
-      0.02,
+      1000,
       math.pi/4)
    )
-   ]]
    self:insert(p)
 end
 
@@ -86,7 +83,7 @@ function Factory:createEnemy(x,y,r,controller)
   
 
    p.att["alive"] =  true
-   p.att["health"] =  10
+   p.att["health"] =  30
    p.att["damage"] =  0
    p.att["type"] =  "hunter" --Sack Of Shit
    p.att["layer"] = self:getLayer(p,self.layers.player)
@@ -96,7 +93,7 @@ function Factory:createEnemy(x,y,r,controller)
    
    p:addComponent(Collision:new(p))
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
-   p:addComponent(LovePhysics:new(p,10,10000,18,1))
+   p:addComponent(LovePhysics:new(p,5,5000,18,1))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("booger"),40))
 
@@ -141,7 +138,7 @@ function Factory:createAstroid(x,y,r,size,health,level)
    --s:addComponent(Physics:new(mass,force,friction))
    s:addComponent(ShotController:new(r))
    --PARENT,MASS,SPEED,RADIUS,RESTITUTION
-   s:addComponent(LoveAsteroidPhysics:new(s,100,10000,(size-5)/2),1)
+   s:addComponent(LoveAsteroidPhysics:new(s,size*2.5,10000,(size-5)/2),1)
    s:addComponent(LovePhysicsScreenFix:new(s,50))
    s:addComponent(AstroidExit:new(level))
    --s:addComponent(ConstSpeed:new((1+math.random()*3)))

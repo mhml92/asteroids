@@ -106,8 +106,8 @@ function AIController:getMostDangerousPos(b)
             -- MIKKEL FIX
             if self.players[i]~=nil then
                local velX,velY = self.players[i].physics.body:getLinearVelocity()
-               pos.x = pos.x + velX-- * self.astroids[i].physics:getSpeed() * 2
-               pos.y = pos.y + velY-- * self.astroids[i].physics:getSpeed() * 2
+               pos.x = pos.x + velX *2-- * self.astroids[i].physics:getSpeed() * 2
+               pos.y = pos.y + velY *2-- * self.astroids[i].physics:getSpeed() * 2
             end
             
             pos.play = false
