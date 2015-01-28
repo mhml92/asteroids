@@ -12,7 +12,7 @@ function GameObject:initialize(id, gs)
    self.controller = nil
    self.physics = nil
    self.graphics = nil
-   self.colsys = nil
+   self.collision = nil
    self.exit = nil
    self.components = {}
 end
@@ -46,8 +46,8 @@ function GameObject:addComponent(comp)
       return
    end
    
-   if comp:getType() == 'CollisionSystem' then
-      self.colsys = comp
+   if comp:getType() == 'Collision' then
+      self.collision = comp
       return
    end
    

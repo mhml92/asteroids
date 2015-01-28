@@ -4,9 +4,9 @@ local AIController = class('AIController')
 
 function AIController:initialize(p)
    self.p = p
-	self.astroids = p.gs.objmgr.astroids
-   self.players = p.gs.objmgr.players
-   self.projectiles = p.gs.objmgr.projectiles
+	self.astroids = self.p.gs.objmgr.astroids
+   self.players = self.p.gs.objmgr.players
+   self.projectiles = self.p.gs.objmgr.projectiles
 end
 
 function AIController:getType()

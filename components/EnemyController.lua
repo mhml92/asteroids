@@ -3,7 +3,8 @@ local class = require 'middleclass'
 local EnemyController = class('EnemyController')
 
 
-function EnemyController:initialize()
+function EnemyController:initialize(p)
+   self.p = p
    self.spaceDown = false
    self.shooting = false 
 end
@@ -12,9 +13,9 @@ function EnemyController:getType()
    return 'Controller'
 end
 
-function EnemyController:update(p) 
+function EnemyController:update() 
    self.shooting = self:isShooting()
-   self.moveDir = self:getMoveDir(p)
+   self.moveDir = self:getMoveDir()
    self.shootDir = self:getShootDir()
 end
 
@@ -22,8 +23,8 @@ function EnemyController:isShooting()
    return false
 end
 
-function EnemyController:getMoveDir(p)
-   local playerPos = p.gs.objmgr.players[1].trans--gameObjects[1].trans
+function EnemyController:getMoveDir()
+   local playerPos = self.p.gs.objmgr.players[1].trans--gameObjects[1].trans
    local myPos = p.trans
    local dir = {}
    dir.x = playerPos.x - myPos.x

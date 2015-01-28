@@ -12,9 +12,9 @@ function AstroidExit:update(p)
    if self.level > 1 then
       for i = 1, 2 do
          p.gs.factory:createAstroid(
-            p.trans.x,
-            p.trans.y,
-            r,
+            p.trans.x+math.random()*40,
+            p.trans.y+math.random()*40,
+            p.trans.r+(((math.random()*2)-1)*math.pi/2),
             p.att["size"]-(p.att["size"]/4),
             health,
             self.level-1)

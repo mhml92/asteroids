@@ -19,23 +19,32 @@ function GameState:initialize()
 
    self.hello = "yo gabba gabba"
    
-   self.world = love.physics.newWorld(0,0,true)
-   love.physics.setMeter(16)
-
    self.resmgr = ResMgr:new(self)
    self.objmgr = ObjectManager:new(self)
    self.factory = Factory:new(self,self.resmgr)
    self.colutil = CollisionUtil:new(self)
    
+   self.world = love.physics.newWorld(0,0,true)
+   self.world:setCallbacks(
+      beginContact,
+      endContact,
+      preSolve,
+      postSolve)
+   
    self:loadImages()
-   --self:addBackground()
    self:startGame()
    
-   -- TEST
+end
 
-   --local joysticks = love.joystick.getJoysticks()
-   --self.j = joysticks[1]
-
+function GameState:startGame()
+   self.objmgr:clear()
+   self:addPlayer(GamePadController)
+   --self:addPlayer(VokronAI)
+   --self:addPlayer(VokronAI)
+   for i = 1,300 do
+      --self:addEnemy(SOSAI)
+   end
+   self:addAstroids(5)
 end
 
 function GameState:loadImages()
@@ -53,55 +62,46 @@ function GameState:loadImages()
    self.resmgr:loadImg('img/crosshair.png','cross')
 end
 
---[[
-   
-   minus point for at skyde lille astroide
-
-
-
-]]
-
-function GameState:startGame()
-   self.objmgr:clear()
-   self:addPlayer(GamePadController)
-   --self:addPlayer(VokronAI)
-   self:addEnemy(SOSAI)
-   --self:addAstroids(5)
-end
-
 function GameState:update(dt)
    self.world:update(dt)
-   --[[
-   if (#self.objmgr.players == 0 or #self.objmgr.astroids == 0)  and self.j:isGamepadDown("start") then
-      self:startGame()
-   end
-   ]]
+   
    -- update
    self.objmgr:updateAll()
-   
-   --collision
-   --self.objmgr:checkCollisions()
 end
-
 
 function GameState:draw()
    love.graphics.draw(self.resmgr:getImg('stjerner'),0,0,0,1,1)
    self.objmgr:drawAll()
 end
 
+-- collision callbacks
+function GameState:beginContact(a,b,coll)
+   self.objmgr:beginContact(a,b,coll)
+end
+
+function GameState:endContact(a,b,coll)
+   self.objmgr:endContact(a,b,coll)
+end
+
+function GameState:preSolve(a,b,coll)
+   self.objmgr:preSolve(a,b,coll)
+end
+
+function GameState:postSolve(a, b, coll, normalimpulse1, tangentimpulse1, normalimpulse2, tangentimpulse2)
+   self.objmgr:postSolve(a, b, coll, normalimpulse1, tangentimpulse1, normalimpulse2, tangentimpulse2)
+
+end
 
 function GameState:addPlayer(controller)
-   --self.player = self.factory:createPlayer(20,20,0)
    local w,h = love.graphics.getDimensions()
    self.factory:createPlayer(math.random()*w,math.random()*h,0,controller)
 end
---[[
-function GameState:addAIPlayer()
-   --self.player = self.factory:createPlayer(20,20,0)
+
+function GameState:addEnemy(controller)
    local w,h = love.graphics.getDimensions()
-   self.factory:createPlayer(math.random()*w,math.random()*h,0,false)
+   self.factory:createEnemy(math.random()*w,math.random()*h,0,controller)
 end
-]]
+
 function GameState:addAstroids(n)
    for i = 1, n do
       local x,y,r,level,size
@@ -114,23 +114,5 @@ function GameState:addAstroids(n)
       self.factory:createAstroid(x,y,r,size,1,level)
    end
 end
-
-
-function GameState:addMultiEnemy(n)
-   local w, h = self.w,self.h--love.graphics.getDimensions( )
-   for i = 1, n do
-      self.factory:createEnemy(math.random()*w,math.random()*h,0,40)
-   end
-end
-
-function GameState:addEnemy(controller)
-   local w,h = love.graphics.getDimensions()
-   self.factory:createEnemy(math.random()*w,math.random()*h,0,controller)
-end
-
-function GameState:addBackground()
-   --table.insert(self.gameObjects,self.factory:createPlayer(20,20,0))
-end
-
 
 return GameState

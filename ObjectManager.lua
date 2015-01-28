@@ -1,6 +1,5 @@
 local class       = require 'middleclass'
 
-local CollisionObject   = require 'CollisionSystem/CollisionObject'
 local ObjectManager = class('ObejctManager')
 
 function ObjectManager:initialize(gs)
@@ -28,47 +27,12 @@ function ObjectManager:updateAll()
    end
 end 
 
-function ObjectManager:checkCollisions()
-   for i = #self.gameObjects,1,-1 do
-      local go1 = self.gameObjects[i]
-      --has collider and is alive
-      if go1.colsys ~= nil and go1.att["alive"] then
-         for j = i-1, 1,-1 do 
-            go2 = self.gameObjects[j]
-            --has collider and is alive
-            if go2.colsys ~= nil and go2.att["alive"] then
-               
-               if not self:hasOwnership(go1,go2) then
-                  --if same type
-                  if gs.colutil:collides(go1,go2) then 
-                     -- colutil:collides should maybe return the collisionobject
-
-                     local co = CollisionObject:new(go1, go2)
-                     go1.colsys:handleCollision(co)
-                     go2.colsys:handleCollision(co)
-                  end
-               end
-            end
-         end
-      end
-   end
-end
-
 function ObjectManager:drawAll() 
    --sort draw order
    table.sort(self.gameObjects,function(a,b)return a.att["layer"]<b.att["layer"] end)
    -- draw dat shjjjiiiaaat
    for k,v in pairs(self.gameObjects) do
       v:draw()
-   end
-end
-
-
-function ObjectManager:hasOwnership(go1,go2)
-   if go1.att["owner"] == go2.id or go2.att["owner"] == go1.id then
-      return true
-   else
-      return false
    end
 end
 
@@ -113,7 +77,34 @@ function ObjectManager:destroy(i)
          end
       end
    end
+   
+
+   if self.gameObjects[i].physics ~= nil then
+      if self.gameObjects[i].physics.body ~= nil then
+         --self.gameObjects[i].physics.fixture:destroy()
+         --self.gameObjects[i].physics.shape:destroy()
+         self.gameObjects[i].physics.body:destroy()
+      end
+   end
+
    table.remove(self.gameObjects,i)
+end
+
+function ObjectManager:beginContact(a,b,coll)
+   local o1, o2
+   o1 = a:getUserData()
+   o2 = b:getUserData()
+   o1.collision:handle(o2)
+   o2.collision:handle(o1)
+end
+
+function ObjectManager:endContact(a,b,coll)
+end
+
+function ObjectManager:preSolve(a,b,coll)
+end
+
+function ObjectManager:postSolve(a, b, coll, normalimpulse1, tangentimpulse1, normalimpulse2, tangentimpulse2)
 end
 
 return ObjectManager
