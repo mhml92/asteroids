@@ -39,11 +39,18 @@ end
 function GameState:startGame()
    self.objmgr:clear()
    self:addPlayer(GamePadController)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
    --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
-   for i = 1,300 do
-      --self:addEnemy(SOSAI)
+  --[[
+   for i = 1,1 do
+      self:addEnemy(SOSAI)
    end
+   ]]
    self:addAstroids(5)
 end
 

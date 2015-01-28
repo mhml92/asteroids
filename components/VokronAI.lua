@@ -102,8 +102,14 @@ function AIController:getMostDangerousPos(b)
          if cb > dist + self.astroids[i].att["size"] * 20 and dist < 300 then
             cb = dist + self.astroids[i].att["size"] * 20
             pos.dist = dist
-            pos.x = pos.x + self.astroids[i].physics.vel.x * self.astroids[i].physics.speed * 2
-            pos.y = pos.y + self.astroids[i].physics.vel.y * self.astroids[i].physics.speed * 2
+            
+            -- MIKKEL FIX
+            if self.players[i]~=nil then
+               local velX,velY = self.players[i].physics.body:getLinearVelocity()
+               pos.x = pos.x + velX-- * self.astroids[i].physics:getSpeed() * 2
+               pos.y = pos.y + velY-- * self.astroids[i].physics:getSpeed() * 2
+            end
+            
             pos.play = false
             pos.proj = false
          else
@@ -158,8 +164,12 @@ function AIController:getMostDangerousPos(b)
             if cb > dist + self.players[i].att["health"] * 2 and dist < 300 then
                cb = dist + self.players[i].att["health"] * 2
                pos.dist = dist
-               pos.x = pos.x + self.players[i].physics.vel.x/self.players[i].physics.mass * 2
-               pos.y = pos.y + self.players[i].physics.vel.y/self.players[i].physics.mass * 2
+               
+               -- MIKKEL FIX
+               local velX,velY = self.players[i].physics.body:getLinearVelocity()
+               pos.x = pos.x + velX/self.players[i].physics.mass * 2
+               pos.y = pos.y + velY/self.players[i].physics.mass * 2
+               
                pos.play = true
                pos.proj = false
             else

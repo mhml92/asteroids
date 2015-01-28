@@ -94,8 +94,8 @@ function ObjectManager:beginContact(a,b,coll)
    local o1, o2
    o1 = a:getUserData()
    o2 = b:getUserData()
-   o1.collision:handle(o2)
-   o2.collision:handle(o1)
+   o1.collision:handle(o2,coll)
+   o2.collision:handle(o1,coll)
 end
 
 function ObjectManager:endContact(a,b,coll)

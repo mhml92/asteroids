@@ -44,6 +44,12 @@ function LoveAsteroidPhysics:update(p)
    
 end
 
+function LoveAsteroidPhysics:getSpeed()
+   local vx,vy = self.body:getLinearVelocity()
+   return math.sqrt(vx^2+vy^2)
+end
+
+
 function LoveAsteroidPhysics:applyForce(x,y)
    self.body:applyForce(x,y)
 end

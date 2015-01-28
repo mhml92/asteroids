@@ -86,9 +86,9 @@ function Factory:createEnemy(x,y,r,controller)
   
 
    p.att["alive"] =  true
-   p.att["health"] =  300
-   p.att["damage"] =  1000
-   p.att["type"] =  "SOS" --Sack Of Shit
+   p.att["health"] =  10
+   p.att["damage"] =  0
+   p.att["type"] =  "hunter" --Sack Of Shit
    p.att["layer"] = self:getLayer(p,self.layers.player)
    
    p:addComponent(controller:new(p))
@@ -96,9 +96,9 @@ function Factory:createEnemy(x,y,r,controller)
    
    p:addComponent(Collision:new(p))
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
-   p:addComponent(LovePhysics:new(p,1,1000,18/2,1))
+   p:addComponent(LovePhysics:new(p,10,10000,18,1))
    
-   p:addComponent(Graphics:new(p,self.rm:getImg("booger"),40/2))
+   p:addComponent(Graphics:new(p,self.rm:getImg("booger"),40))
 
    -- COOLDOWN, FORCE
    p:addComponent(Weapon:new(20,100))
