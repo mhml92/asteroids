@@ -13,6 +13,8 @@ end
 function ObjectManager:clear()
    self.gameObjects = {}
    self.players = {}
+   self.astroids = {}
+   self.projectiles = {}
 end
 function ObjectManager:updateAll()
    for i = #self.gameObjects, 1, -1 do

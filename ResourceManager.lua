@@ -8,6 +8,7 @@ end
 
 function ResourceManager:loadImg(filename,handle)
    self.img[handle] =  love.graphics.newImage(filename)
+   self.img[handle]:setFilter("nearest","nearest")
 end
 
 function ResourceManager:getImg(handle)

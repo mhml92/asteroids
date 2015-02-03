@@ -29,7 +29,7 @@ function love.update(dt)
 end
 
 function love.draw()
-   
+
    love.graphics.setCanvas(canvas)
    
    self.canvas:setFilter("nearest","nearest")
