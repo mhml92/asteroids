@@ -61,8 +61,8 @@ function Factory:createPlayer(x,y,r,controller)
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),40))
 
    -- COOLDOWN, FORCE
-   --p:addComponent(BasicWeapon:new(20,500))
-   p:addComponent(Shotgun:new(40,5*500))
+   p:addComponent(BasicWeapon:new(20,500))
+   --p:addComponent(Shotgun:new(40,5*500))
    p:addComponent(PlayerExit:new()) 
    p:addComponent(LovePhysicsScreenFix:new(p,0))
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
