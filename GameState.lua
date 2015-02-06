@@ -13,7 +13,7 @@ local KeyboardController= require 'components/KeyboardController'
 
 -- AI
 local VokronAI          = require 'AI/michael/VokronAI'
-local SOSAI             = require 'AI/EnemyController'
+local Chaser             = require 'AI/basic/Chaser'
 local AIStarter         = require 'AI/AIstarter/AIStarter'
 
 function GameState:initialize()
@@ -32,6 +32,8 @@ function GameState:initialize()
       postSolve)
    
    self:loadImages()
+   
+   
    self:startGame()
    
 end
@@ -43,7 +45,7 @@ function GameState:startGame()
    --self:addPlayer(KeyboardController)
    self:addPlayer(VokronAI)
    --for i = 1,3 do
-   --   self:addEnemy(SOSAI)
+   --   self:addEnemy(Chaser)
    --end
    self:addAstroids(6)
 end
