@@ -7,14 +7,14 @@ local ObjectManager     = require 'ObjectManager'
 local GameState = class('GameState')
 
 
--- Controllers
+-- User Controllers
 local GamePadController = require 'components/GamePadController'
 local KeyboardController= require 'components/KeyboardController'
 
 -- AI
-local VokronAI          = require 'components/VokronAI'
-local SOSAI             = require 'components/EnemyController'
-local AIStarter         = require 'components/AIStarter'
+local VokronAI          = require 'AI/michael/VokronAI'
+local SOSAI             = require 'AI/EnemyController'
+local AIStarter         = require 'AI/AIstarter/AIStarter'
 
 function GameState:initialize()
 
