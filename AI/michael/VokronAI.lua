@@ -147,7 +147,7 @@ function AIController:getMostDangerousPos(b)
    
    for i = 1, #self.players do
       if self.p.id ~= self.players[i].id then
-      local velX,velY = self.plyaers[i].physics.body:getLinearVelocity()
+      local velX,velY = self.players[i].physics.body:getLinearVelocity()
       local ox = pos.x
       local oy = pos.y
       local ax = self.players[i].trans.x + velX/10
