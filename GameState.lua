@@ -13,7 +13,6 @@ local KeyboardController= require 'components/KeyboardController'
 
 -- AI
 local VokronAI          = require 'components/VokronAI'
-local VokronAIalt       = require 'components/VokronAI-alt'
 local SOSAI             = require 'components/EnemyController'
 local AIStarter         = require 'components/AIStarter'
 
@@ -39,11 +38,10 @@ end
 
 function GameState:startGame()
    self.objmgr:clear()
-   self:addPlayer(AIStarter)
-   self:addPlayer(GamePadController)
+   --self:addPlayer(AIStarter)
+   --self:addPlayer(GamePadController)
    --self:addPlayer(KeyboardController)
-   --self:addPlayer(VokronAIalt)
-   --self:addPlayer(VokronAIalt)
+   self:addPlayer(VokronAI)
    --for i = 1,3 do
    --   self:addEnemy(SOSAI)
    --end
