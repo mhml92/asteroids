@@ -41,8 +41,10 @@ end
 function GameState:startGame()
    self.objmgr:clear()
    --self:addPlayer(AIStarter)
-   --self:addPlayer(GamePadController)
+   self:addPlayer(GamePadController)
    --self:addPlayer(KeyboardController)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
    self:addPlayer(VokronAI)
    --for i = 1,3 do
    --   self:addEnemy(Chaser)

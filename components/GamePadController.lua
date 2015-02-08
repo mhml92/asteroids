@@ -7,6 +7,13 @@ function GamePadController:initialize(p)
    self.p = p
    local joysticks = love.joystick.getJoysticks()
    self.j = joysticks[1]
+   --[[
+   for k,v in joysticks do
+      print("LOLOLOLOL")   
+      self.j = v
+      --break
+   end
+   ]]
 end
 
 
