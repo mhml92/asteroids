@@ -56,7 +56,7 @@ function Factory:createPlayer(x,y,r,controller)
    --p:addComponent(Physics:new(50,10,0.99))
    
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
-   p:addComponent(LovePhysics:new(p,10,10000,18,1))
+   p:addComponent(LovePhysics:new(p,10,10000,20,1))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),40))
 
