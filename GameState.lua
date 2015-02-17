@@ -40,26 +40,30 @@ end
 
 function GameState:startGame()
    self.objmgr:clear()
-   --self:addPlayer(AIStarter)
+   self:addPlayer(AIStarter)
    self:addPlayer(GamePadController)
    --self:addPlayer(KeyboardController)
-   --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
+   self:addPlayer(VokronAI)
    --for i = 1,3 do
    --   self:addEnemy(Chaser)
    --end
-   self:addAstroids(6)
+   self:addAstroids(10)
 end
 
 function GameState:loadImages()
+   self.resmgr:loadImg('img/asteroids/asteroid3.png',"asteroid3")
+   self.resmgr:loadImg('img/asteroids/asteroid2.png',"asteroid2")
+   self.resmgr:loadImg('img/asteroids/asteroid1.png',"asteroid1")
+   self.resmgr:loadImg('img/bg.png', "minbg")
    self.resmgr:loadImg('img/ship2.png',"spaceship")
    self.resmgr:loadImg('img/player.png',"booger")
    self.resmgr:loadImg('img/shot.png',"fire")
    self.resmgr:loadImg('img/saft.png',"saft")
    self.resmgr:loadImg('img/fighter.png',"fighter")
-   self.resmgr:loadImg('img/asteroid.png','astroid1')
-   self.resmgr:loadImg('img/asteroid1.png','astroid2')
+   --self.resmgr:loadImg('img/asteroid.png','astroid1')
+   --self.resmgr:loadImg('img/asteroid1.png','astroid2')
    self.resmgr:loadImg('img/bg.png',"bg")
    self.resmgr:loadImg('img/stjerner.png','stjerner')
    --self.resmgr:loadImg('img/monster.png',"astroid")
@@ -75,7 +79,7 @@ function GameState:update(dt)
 end
 
 function GameState:draw()
-   love.graphics.draw(self.resmgr:getImg('stjerner'),0,0,0,1,1)
+   love.graphics.draw(self.resmgr:getImg('minbg'),0,0,0,2,2)
    self.objmgr:drawAll()
 end
 
@@ -108,6 +112,14 @@ function GameState:addEnemy(controller)
 end
 
 function GameState:addAstroids(n)
+   --[[
+      100
+      76
+      56
+      42
+      32
+      24
+   ]]
    for i = 1, n do
       local x,y,r,level,size
       local w, h = love.graphics.getDimensions()
@@ -115,7 +127,7 @@ function GameState:addAstroids(n)
       y = math.random()*h
       r = math.random()*2*math.pi
       size = 100
-      level = 6
+      level = 3
       self.factory:createAstroid(x,y,r,size,1,level)
    end
 end

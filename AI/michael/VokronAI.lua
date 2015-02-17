@@ -29,7 +29,7 @@ function AIController:getMoveDir()
    local dir = {}
    local velX,velY = self.p.physics.body:getLinearVelocity()
    local speed = math.sqrt(velX^2+velY^2)
-   print('Speed:' .. speed .. ' Dist: ' .. apos.dist .. ' Count: ' .. apos.count)
+   --print('Speed:' .. speed .. ' Dist: ' .. apos.dist .. ' Count: ' .. apos.count)
    if apos.dist < math.max(speed/1.5,100) or (apos.play and apos.dist < 700 and #self.astroids > 0) then
       dir.x = (apos.x - self.p.trans.x) * -1
       dir.y = (apos.y - self.p.trans.y) * -1
@@ -63,7 +63,7 @@ function AIController:getShootDir()
    else
       self.shoot = false
    end
-   print(self.shoot)
+   --print(self.shoot)
    --move
    return dir  
 end

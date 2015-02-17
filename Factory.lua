@@ -39,6 +39,8 @@ function Factory:initialize(gs,rm)
 end
 
 function Factory:createPlayer(x,y,r,controller)
+   local SIZE = 40
+   
    local p = self:newGameObject()
   
 
@@ -56,17 +58,17 @@ function Factory:createPlayer(x,y,r,controller)
    --p:addComponent(Physics:new(50,10,0.99))
    
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
-   p:addComponent(LovePhysics:new(p,10,10000,20,1))
+   p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
    
-   p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),40))
+   p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
 
    -- COOLDOWN, FORCE
-   p:addComponent(BasicWeapon:new(20,500))
-   --p:addComponent(Shotgun:new(40,5*500))
+   --p:addComponent(BasicWeapon:new(20,0))
+   p:addComponent(Shotgun:new(40,5*500))
    p:addComponent(PlayerExit:new()) 
    p:addComponent(LovePhysicsScreenFix:new(p,0))
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
-   p:addComponent(Exhaust:new(
+   --[[p:addComponent(Exhaust:new(
       -15,
       0,
       self.rm:getImg("fire"),
@@ -75,6 +77,7 @@ function Factory:createPlayer(x,y,r,controller)
       1000,
       math.pi/4)
    )
+   ]]
    self:insert(p)
 end
 
@@ -122,6 +125,21 @@ end
 
 function Factory:createAstroid(x,y,r,size,health,level)
    local s = self:newGameObject()
+   local as
+   --[[if math.random() < 0.5 then
+      as = self.rm:getImg("astroid1")
+   else
+      as = self.rm:getImg("astroid2")
+   end
+   ]]
+   if level == 3 then
+      as = self.rm:getImg("asteroid3")
+   elseif level == 2 then
+      as = self.rm:getImg("asteroid2")
+   elseif level == 1 then
+      as = self.rm:getImg("asteroid1")
+   end
+   size = 2*as:getWidth()
    
    s.att["type"] = "astroid"
    --s.att["damage"] = 1
@@ -144,12 +162,6 @@ function Factory:createAstroid(x,y,r,size,health,level)
    --s:addComponent(ConstSpeed:new((1+math.random()*3)))
    --s:addComponent(DebugGraphics:new(255,0,0))
   
-   local as
-   if math.random() < 0.5 then
-      as = self.rm:getImg("astroid1")
-   else
-      as = self.rm:getImg("astroid2")
-   end
    --s:addComponent(AstroidsGraphics:new(as,size))
    s:addComponent(Graphics:new(s,as,size))
    self:insert(s) 

@@ -17,7 +17,7 @@ function LovePhysics:initialize(p,mass,force,radius,ldamping)
    self.body:resetMassData()
    self.body:setMass(self.mass)
 
-   --self.body:setLinearDamping(self.ldamping)
+   self.body:setLinearDamping(self.ldamping)
 end
 
 function LovePhysics:getType()
