@@ -31,19 +31,28 @@ function BasicWeapon:update(p)
          t.iy = t.iy/t.len
          t.x = p.trans.x-- + 25 * math.cos(t.r)
          t.y = p.trans.y-- + 25 * math.sin(t.r)
+      else
+         t.len = 1 --math.sqrt(p.controller.shootDir.x^2 + p.controller.shootDir.y^2)
+         t.r = p.trans.r --math.atan2(p..y,p.controller.moveDir.x)
+         t.ix = p.controller.moveDir.x *-1
+         t.ix = t.ix/t.len
+         t.iy = p.controller.moveDir.y *-1
+         t.iy = t.iy/t.len
+         t.x = p.trans.x-- + 25 * math.cos(t.r)
+         t.y = p.trans.y-- + 25 * math.sin(t.r)
+      end
          
          --for i = 1,5 do
          p.gs.factory:createProjectile(
             t.x,
             t.y,
-            t.r+(math.random()-0.5)*math.pi/16,
+            t.r,
             10, -- damage
             p.gs.resmgr:getImg("fire"), --sprite
             20, -- size
             p.id) -- owner
          --end 
-         p.physics:applyLinearImpulse(self.force*t.ix,self.force*t.iy)
-      end
+         --p.physics:applyLinearImpulse(self.force*t.ix,self.force*t.iy)
    end
 end
 return BasicWeapon

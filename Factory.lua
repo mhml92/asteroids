@@ -22,6 +22,11 @@ local AstroidExit             = require 'components/AstroidExit'
 local PlayerExit              = require 'components/PlayerExit'
 local Crosshair               = require 'components/effects/crosshair'
 
+
+local AltLovePhysics          = require 'components/AltLovePhysics'
+local AltGamePadController    = require 'components/AltGamePadController'
+
+
 local Factory = class('Factory')
 
 function Factory:initialize(gs,rm)
@@ -45,12 +50,13 @@ function Factory:createPlayer(x,y,r,controller)
   
 
    p.att["alive"] =  true
-   p.att["health"] =  300
+   p.att["health"] =  3
    p.att["damage"] =  10
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
    
-   p:addComponent(controller:new(p))
+   --p:addComponent(controller:new(p))
+   p:addComponent(AltGamePadController:new(p))
    p:addComponent(Transformation:new(x,y,r))
    p:addComponent(Collision:new(p))
    --p:addComponent(CollisionSystem:new(p,Collider:new(18)))
@@ -58,13 +64,14 @@ function Factory:createPlayer(x,y,r,controller)
    --p:addComponent(Physics:new(50,10,0.99))
    
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
-   p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
+   --p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
+   p:addComponent(AltLovePhysics:new(p,10,10000,SIZE/2,1))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
 
    -- COOLDOWN, FORCE
    --p:addComponent(BasicWeapon:new(20,0))
-   p:addComponent(Shotgun:new(40,5*500))
+   p:addComponent(Shotgun:new(40,0))
    p:addComponent(PlayerExit:new()) 
    p:addComponent(LovePhysicsScreenFix:new(p,0))
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
@@ -156,7 +163,7 @@ function Factory:createAstroid(x,y,r,size,health,level)
    --s:addComponent(Physics:new(mass,force,friction))
    s:addComponent(ShotController:new(r))
    --PARENT,MASS,SPEED,RADIUS,RESTITUTION
-   s:addComponent(LoveAsteroidPhysics:new(s,size*2.5,10000,(size-5)/2),1)
+   s:addComponent(LoveAsteroidPhysics:new(s,size*25,size/3 * 10000,(size-5)/2),1)
    s:addComponent(LovePhysicsScreenFix:new(s,50))
    s:addComponent(AstroidExit:new(level))
    --s:addComponent(ConstSpeed:new((1+math.random()*3)))

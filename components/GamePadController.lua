@@ -28,9 +28,9 @@ function GamePadController:update()
 end
 
 function GamePadController:isShooting()
-   if self.shootDir.x ~= 0 or self.shootDir.y ~= 0 then
+   --if self.shootDir.x ~= 0 or self.shootDir.y ~= 0 then
       return self.j:isGamepadDown("rightshoulder");
-   end
+   --end
 end
 
 function GamePadController:getMoveDir()
@@ -41,6 +41,8 @@ function GamePadController:getMoveDir()
 end
 
 function GamePadController:getShootDir()
+      print(self.j:getGamepadAxis("triggerright")) 
+      print(self.j:getGamepadAxis("triggerleft")) 
    local dir = {}
    dir.x = self.j:getGamepadAxis("rightx")
    dir.y = self.j:getGamepadAxis("righty")
