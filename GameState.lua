@@ -8,8 +8,10 @@ local GameState = class('GameState')
 
 
 -- User Controllers
+local AltGamePadController    = require 'components/AltGamePadController'
 local GamePadController = require 'components/GamePadController'
 local KeyboardController= require 'components/KeyboardController'
+local AltKeyboardController= require 'components/AltKeyboardController'
 
 -- AI
 local VokronAI          = require 'AI/michael/VokronAI'
@@ -41,8 +43,8 @@ end
 function GameState:startGame()
    self.objmgr:clear()
    --self:addPlayer(AIStarter)
-   self:addPlayer(GamePadController)
-   --self:addPlayer(KeyboardController)
+   --self:addPlayer(AltGamePadController)
+   self:addPlayer(AltKeyboardController)
    --self:addPlayer(VokronAI)
    --self:addPlayer(VokronAI)
    --self:addPlayer(VokronAI)
@@ -68,6 +70,7 @@ function GameState:loadImages()
    self.resmgr:loadImg('img/stjerner.png','stjerner')
    --self.resmgr:loadImg('img/monster.png',"astroid")
    self.resmgr:loadImg('img/hit.png','hit')
+   self.resmgr:loadImg('img/explosion.png','explosion')
    self.resmgr:loadImg('img/crosshair.png','cross')
 end
 

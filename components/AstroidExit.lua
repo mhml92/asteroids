@@ -38,9 +38,8 @@ function AstroidExit:update(p)
       nlevel = self.level-1
       p.gs.factory:createAstroid(posxA,posyA,rotA,nsize,health,nlevel)
       p.gs.factory:createAstroid(posxB,posyB,rotB,nsize,health,nlevel)
-      p.gs.factory:createHit(p.trans.x,p.trans.y,math.random()*2*math.pi,p.gs.resmgr:getImg("hit"),p.att["size"]*1.5,15) 
-      p.gs.factory:createHit(p.trans.x,p.trans.y,math.random()*2*math.pi,p.gs.resmgr:getImg("hit"),p.att["size"]*1.25,10) 
-      p.gs.factory:createHit(p.trans.x,p.trans.y,math.random()*2*math.pi,p.gs.resmgr:getImg("hit"),p.att["size"],5) 
+      local asize = p.att["size"]
+      p.gs.factory:createExplosion(p.trans.x,p.trans.y,asize*1.5,15,asize*1.25,10,asize,5)
       --[[
       for i = 1,10 do
          local dx = love.math.randomNormal(p.att["size"]/2.5, p.trans.x)

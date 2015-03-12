@@ -24,7 +24,6 @@ local Crosshair               = require 'components/effects/crosshair'
 
 
 local AltLovePhysics          = require 'components/AltLovePhysics'
-local AltGamePadController    = require 'components/AltGamePadController'
 
 
 local Factory = class('Factory')
@@ -55,8 +54,7 @@ function Factory:createPlayer(x,y,r,controller)
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
    
-   --p:addComponent(controller:new(p))
-   p:addComponent(AltGamePadController:new(p))
+   p:addComponent(controller:new(p))
    p:addComponent(Transformation:new(x,y,r))
    p:addComponent(Collision:new(p))
    --p:addComponent(CollisionSystem:new(p,Collider:new(18)))
@@ -65,14 +63,14 @@ function Factory:createPlayer(x,y,r,controller)
    
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
    --p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
-   p:addComponent(AltLovePhysics:new(p,10,10000,SIZE/2,1))
+   p:addComponent(AltLovePhysics:new(p,10,10000,SIZE/2,0.8))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
 
    -- COOLDOWN, FORCE
    --p:addComponent(BasicWeapon:new(20,0))
    p:addComponent(Shotgun:new(40,0))
-   p:addComponent(PlayerExit:new()) 
+   p:addComponent(PlayerExit:new(p)) 
    p:addComponent(LovePhysicsScreenFix:new(p,0))
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
    --[[p:addComponent(Exhaust:new(
@@ -210,6 +208,14 @@ function Factory:createHit(x,y,r,img,size,time)
    s:addComponent(TimeToLive:new(time))
    s.att["layer"] = self:getLayer(s,self.layers.hit)
    self:insert(s) 
+end
+function Factory:createExplosion(x,y,e1s,e1t,e2s,e2t,e3s,e3t)
+
+      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("explosion"),e3s,e3t)
+      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("explosion"),e2s,e2t)
+      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("hit"),e1s,e1t)
+      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("hit"),e2s,e2t)
+      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("hit"),e3s,e3t)
 end
 
 function Factory:getLayer(o,l)
