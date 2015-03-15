@@ -62,7 +62,7 @@ function Factory:createPlayer(x,y,r,controller)
    
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
    --p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
-   p:addComponent(AltLovePhysics:new(p,10,10000,SIZE/2,0.8))
+   p:addComponent(AltLovePhysics:new(p,20,10000,SIZE/2,0.2))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
 

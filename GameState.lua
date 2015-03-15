@@ -89,17 +89,15 @@ function GameState:update(dt)
    -- update
    self.objmgr:updateAll()
    
-   local player = nil
+   local cpos = nil
    if self.objmgr.players[1] ~= nil then
-      player = self.objmgr.players[1].trans
+      cpos = self.objmgr.players[1].trans
    else
-      player = {} 
-      player.x = 0--self.objmgr.gameObjects[1].trans.x
-      player.y = 0--self.objmgr.gameObjects[1].trans.y
-      --player.r = self.objmgr.gameObjects[1].trans.r
+      cpos = {} 
+      cpos.x = 0
+      cpos.y = 0
    end
-   self.cam:lookAt(player.x,player.y)
-   --self.cam:rotateTo(-player.r- math.pi/2)
+   self.cam:lookAt(cpos.x,cpos.y)
 end
 
 function GameState:draw()
