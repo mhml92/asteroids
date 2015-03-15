@@ -32,7 +32,7 @@ function love.draw()
 
    love.graphics.setCanvas(canvas)
    
-   self.canvas:setFilter("nearest","nearest")
+   --self.canvas:setFilter("nearest","nearest")
    self.canvas:clear()
    self.gs:draw()
     

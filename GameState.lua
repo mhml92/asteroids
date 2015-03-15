@@ -71,11 +71,13 @@ function GameState:loadImages()
    --self.resmgr:loadImg('img/asteroid1.png','astroid2')
    self.resmgr:loadImg('img/bg.png',"bg")
    self.resmgr:loadImg('img/floatbg1.png',"floatbg1")
+   self.resmgr:loadImg('img/floatbg2.png',"floatbg2")
    
    --self.resmgr:loadImg('img/monster.png',"astroid")
    self.resmgr:loadImg('img/hit.png','hit')
    self.resmgr:loadImg('img/explosion.png','explosion')
    self.resmgr:loadImg('img/crosshair.png','cross')
+   self.resmgr:loadImg('img/square.png','square')
 end
 
 function GameState:update(dt)
@@ -140,13 +142,22 @@ function GameState:drawBackgroundLayer(x,y,img,distance)
    if distance == 0 then
       distance = 0.000001
    end
-   local w,h = love.graphics.getDimensions()
+   local w,h = img:getWidth()*2,img:getHeight()*2
    local x1,y1 = math.floor(x/w), math.floor(y/h)
    local dx,dy = (x/distance) % w,(y/distance) % h   
-   local offx,offy = -dx+w/2,-dy+h/2
+   local offx,offy = (x % w)-dx,(y % h)-dy
+
+   local Xc,Yc = (x1*w)+offx, (y1*h)+offy
+   local wh,hh = w/2,h/2
+   local X1,X2 = Xc - wh, Xc + wh
+   local Y1,Y2 = Yc - hh, Yc + hh
+   love.graphics.draw(img,X1,Y1,0,2,2)
+   love.graphics.draw(img,X2,Y1,0,2,2)
+   love.graphics.draw(img,X1,Y2,0,2,2)
+   love.graphics.draw(img,X2,Y2,0,2,2)
+   --[[
    local Xw,Xc,Xe = ((x1-1)*w)+offx, (x1*w)+offx, ((x1+1)*w)+offx
    local Yn,Yc,Ys = ((y1-1)*h)+offy, (y1*h)+offy, ((y1+1)*h)+offy
-
    --center 
    love.graphics.draw(img,Xc,Yc,0,2,2)
 
@@ -161,12 +172,14 @@ function GameState:drawBackgroundLayer(x,y,img,distance)
    love.graphics.draw(img,Xe,Ys,0,2,2)
    love.graphics.draw(img,Xw,Ys,0,2,2)
    love.graphics.draw(img,Xw,Yn,0,2,2)
+   ]]
 end
 
 function GameState:drawBackground(x,y)
-   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),20)
-   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),10)
+   --self:drawBackgroundLayer(x,y,self.resmgr:getImg('square'),10)
+   self:drawBackgroundLayer(x,y,self.resmgr:getImg('bg'),10)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),5)
+   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg2'),1)
 end
 
 function GameState:addPlayer(controller)
