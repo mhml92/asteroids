@@ -1,4 +1,4 @@
-local class = require 'middleclass'
+local class = require 'middleclass/middleclass'
 local BasicWeapon = class('BasicWeapon')
 
 function BasicWeapon:initialize(coolDown,force)

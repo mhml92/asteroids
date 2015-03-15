@@ -1,4 +1,4 @@
-local class = require 'middleclass'
+local class = require 'middleclass/middleclass'
 local LoveProjectilePhysics = class('LoveProjectilePhysics')
 
 function LoveProjectilePhysics:initialize(p,speed,radius)

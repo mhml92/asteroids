@@ -1,5 +1,4 @@
-
-local class = require 'middleclass'
+local class = require 'middleclass/middleclass'
 local AstroidExit = class('ShotExit')
 function AstroidExit:initialize(level)
    self.level = level;

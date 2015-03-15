@@ -1,4 +1,4 @@
-local class       = require 'middleclass'
+local class = require 'middleclass/middleclass'
 local Crosshair = class('Crosshair')
 
 function Crosshair:initialize(img)

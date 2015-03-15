@@ -1,4 +1,4 @@
-local class = require 'middleclass'
+local class = require 'middleclass/middleclass'
 local PlayerExit = class('ShotExit')
 function PlayerExit:initialize(p)
    self.p = p

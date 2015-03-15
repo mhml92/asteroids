@@ -1,4 +1,4 @@
-local class             = require 'middleclass'
+local class             = require 'middleclass/middleclass'
 local Factory           = require 'Factory'
 local GameObject        = require 'GameObject'
 local ResMgr            = require 'ResourceManager'
@@ -177,8 +177,8 @@ end
 
 function GameState:drawBackground(x,y)
    --self:drawBackgroundLayer(x,y,self.resmgr:getImg('square'),10)
-   self:drawBackgroundLayer(x,y,self.resmgr:getImg('bg'),10)
-   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),5)
+   self:drawBackgroundLayer(x,y,self.resmgr:getImg('bg'),5)
+   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),2.5)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg2'),1)
 end
 

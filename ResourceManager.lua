@@ -1,4 +1,4 @@
-local class = require 'middleclass'
+local class = require 'middleclass/middleclass'
 local ResourceManager = class('ResourceManager')
 
 function ResourceManager:initialize(gs)

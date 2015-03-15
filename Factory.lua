@@ -1,4 +1,4 @@
-local class                   = require 'middleclass'
+local class                   = require 'middleclass/middleclass'
 
 local GameObject              = require 'GameObject'
 local Collision               = require 'components/Collision'
@@ -16,7 +16,6 @@ local Shotgun                 = require 'components/weapons/Shotgun'
 local ShotController          = require 'components/ShotController'
 local TimeToLive              = require 'components/TimeToLive'
 local LovePhysicsScreenFix    = require 'components/LovePhysicsScreenFix'
-local Exhaust                 = require 'components/effects/Exhaust'
 local ShotExit                = require 'components/ShotExit'
 local AstroidExit             = require 'components/AstroidExit'
 local PlayerExit              = require 'components/PlayerExit'

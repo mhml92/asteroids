@@ -1,6 +1,6 @@
 math.random = love.math.random
 
-local class       = require 'middleclass'
+local class       = require 'middleclass/middleclass'
 local GameState   = require 'GameState'
 
 local time = {}
