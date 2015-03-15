@@ -32,7 +32,7 @@ end
 function LovePhysics:update()
    local p = self.p
    if p.controller ~= nil then
-      self.turnmomentum = self.turnmomentum * 0.10
+      self.turnmomentum = self.turnmomentum * 0.50
       self.turnmomentum = self.turnmomentum + p.controller.moveDir.turn 
       local maxts = 1
       if(math.abs(self.turnmomentum) > maxts)then

@@ -7,12 +7,13 @@ function LoveProjectilePhysics:initialize(p,speed,radius)
    self.speed = speed
    self.radius = radius
 
-   self.body = love.physics.newBody(p.gs.world,p.trans.x,p.trans.y,"kinematic") 
+   self.body = love.physics.newBody(p.gs.world,p.trans.x,p.trans.y,"dynamic") 
    self.shape = love.physics.newCircleShape(self.radius)
    self.fixture = love.physics.newFixture(self.body,self.shape)
    self.fixture:setUserData(self.p)
    self.body:setBullet(true)
    self.fixture:setSensor(true)
+   self:applyLinearImpulse(p.controller.moveDir.x*self.speed,p.controller.moveDir.y*self.speed)
 end
 
 function LoveProjectilePhysics:getType()
@@ -21,7 +22,7 @@ end
 
 function LoveProjectilePhysics:update(p)
   -- local p = self.p
-   
+  --[[ 
    if p.controller ~= nil then
       if p.controller.moveDir.x ~= 0 or p.controller.moveDir.y ~= 0 then 
          
@@ -34,8 +35,8 @@ function LoveProjectilePhysics:update(p)
    end
    
    -- update transformation
+   ]]
    p.trans.x, p.trans.y = self.body:getPosition()
-   
 end
 
 function LoveProjectilePhysics:applyForce(x,y)

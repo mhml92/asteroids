@@ -11,10 +11,9 @@ function ObjectManager:initialize(gs)
 end
 
 function ObjectManager:clear()
-   self.gameObjects = {}
-   self.players = {}
-   self.astroids = {}
-   self.projectiles = {}
+   for i = #self.gameObjects, 1, -1 do
+      self:destroy(i)
+   end
 end
 function ObjectManager:updateAll()
    for i = #self.gameObjects, 1, -1 do
