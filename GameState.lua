@@ -3,16 +3,16 @@ local Factory           = require 'Factory'
 local GameObject        = require 'GameObject'
 local ResMgr            = require 'ResourceManager'
 local ObjectManager     = require 'ObjectManager'
-local CameraManager            = require "CameraManager"
+local CameraManager     = require "CameraManager"
 
 local GameState = class('GameState')
 
 
 -- User Controllers
 local AltGamePadController    = require 'components/AltGamePadController'
-local GamePadController = require 'components/GamePadController'
-local KeyboardController= require 'components/KeyboardController'
-local AltKeyboardController= require 'components/AltKeyboardController'
+local GamePadController       = require 'components/GamePadController'
+local KeyboardController      = require 'components/KeyboardController'
+local AltKeyboardController   = require 'components/AltKeyboardController'
 
 -- AI
 local VokronAI          = require 'AI/michael/VokronAI'
@@ -178,7 +178,7 @@ function GameState:drawBackgroundLayer(x,y,img,distance)
 end
 
 function GameState:drawBackground(x,y)
-   --self:drawBackgroundLayer(x,y,self.resmgr:getImg('square'),10)
+   --self:drawBackgroundLayer(x,y,self.resmgr:getImg('square'),6)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('bg'),5)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg2'),3.5)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),2.5)

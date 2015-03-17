@@ -63,80 +63,23 @@ function Factory:createPlayer(x,y,r,controller)
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
    --p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING,MAXSPEED
-   p:addComponent(AltLovePhysics:new(p,15,20000,SIZE/2,0.5,1000))
+   p:addComponent(AltLovePhysics:new(p,15,25000,SIZE/2,0.5,1000))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
 
    -- COOLDOWN, FORCE
    p:addComponent(BasicWeapon:new(20,0))
    --p:addComponent(Shotgun:new(40,0))
+   
    p:addComponent(PlayerExit:new(p)) 
-   --p:addComponent(LovePhysicsScreenFix:new(p,0))
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
-   --[[p:addComponent(Exhaust:new(
-      -15,
-      0,
-      self.rm:getImg("fire"),
-      1000,
-      100,
-      1000,
-      math.pi/4)
-   )
-   ]]
-   self:insert(p)
-end
-
-function Factory:createEnemy(x,y,r,controller)
-   local p = self:newGameObject()
-  
-
-   p.att["alive"] =  true
-   p.att["health"] =  30
-   p.att["damage"] =  0
-   p.att["type"] =  "hunter" --Sack Of Shit
-   p.att["layer"] = self:getLayer(p,self.layers.player)
-   
-   p:addComponent(controller:new(p))
-   p:addComponent(Transformation:new(x,y,r))
-   
-   p:addComponent(Collision:new(p))
-   -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
-   p:addComponent(LovePhysics:new(p,5,5000,18,1))
-   
-   p:addComponent(Graphics:new(p,self.rm:getImg("booger"),40))
-
-   -- COOLDOWN, FORCE
-   p:addComponent(Weapon:new(20,100))
-   p:addComponent(PlayerExit:new()) 
-   p:addComponent(LovePhysicsScreenFix:new(p,50))
-   p:addComponent(Crosshair:new(self.rm:getImg("cross")))
-   --[[
-   p:addComponent(controller:new(p))
-   p:addComponent(Transformation:new(x,y,r))
-   --p:addComponent(CollisionSystem:new(p,Collider:new(18)))
-   
-   --p:addComponent(Physics:new(50,10,0.99))
-   
-   -- PARENT, MASS, FORCE, SIZE(radius)
-   p:addComponent(LovePhysics:new(p,0,100,19))
-   
-   p:addComponent(Graphics:new(p,self.rm:getImg("booger"),40))
-   p:addComponent(PlayerExit:new()) 
-   p:addComponent(LovePhysicsScreenFix:new())
-   ]]
    
    self:insert(p)
 end
 
 function Factory:createAstroid(x,y,r,size,health,level)
    local s = self:newGameObject()
-   local as
-   --[[if math.random() < 0.5 then
-      as = self.rm:getImg("astroid1")
-   else
-      as = self.rm:getImg("astroid2")
-   end
-   ]]
+   local as = nil
    if level == 3 then
       as = self.rm:getImg("asteroid3")
    elseif level == 2 then
@@ -147,7 +90,6 @@ function Factory:createAstroid(x,y,r,size,health,level)
    size = 2*as:getWidth()
    
    s.att["type"] = "astroid"
-   --s.att["damage"] = 1
    s.att["alive"] = true
    s.att["damage"] = 1000
    s.att["health"] = health
@@ -157,17 +99,10 @@ function Factory:createAstroid(x,y,r,size,health,level)
    
    s:addComponent(Collision:new(s))
    s:addComponent(Transformation:new(x,y,r))
-   --s:addComponent(CollisionSystem:new(s,Collider:new((size)/2)))
-   --s:addComponent(Physics:new(mass,force,friction))
    s:addComponent(ShotController:new(r))
    --PARENT,MASS,SPEED,RADIUS,RESTITUTION
    s:addComponent(LoveAsteroidPhysics:new(s,size*25,size/3 * 10000,(size-5)/2),1)
-   --s:addComponent(LovePhysicsScreenFix:new(s,50))
    s:addComponent(AstroidExit:new(level))
-   --s:addComponent(ConstSpeed:new((1+math.random()*3)))
-   --s:addComponent(DebugGraphics:new(255,0,0))
-  
-   --s:addComponent(AstroidsGraphics:new(as,size))
    s:addComponent(Graphics:new(s,as,size))
    self:insert(s) 
 end
@@ -185,13 +120,9 @@ function Factory:createProjectile(x,y,r,damage,img,size,owner)
    s:addComponent(Transformation:new(x,y,r))
    s:addComponent(ShotController:new(r))
    s:addComponent(Collision:new(s))
-   --s:addComponent(CollisionSystem:new(s,Collider:new(size/2)))
    -- PARENT,SPEED,RADIUS
    s:addComponent(LoveProjectilePhysics:new(s,600,size/2))
-   --s:addComponent(ConstSpeed:new(20))
-   --s:addComponent(LovePhysicsScreenFix:new(s,0))
    s:addComponent(Graphics:new(s,img,size))
-   --s:addComponent(DebugGraphics:new(0,255,0))
    s:addComponent(TimeToLive:new(10))
    s:addComponent(ShotExit:new())
    self:insert(s) 
@@ -210,12 +141,10 @@ function Factory:createHit(x,y,r,img,size,time)
    self:insert(s) 
 end
 function Factory:createExplosion(x,y,e1s,e1t,e2s,e2t,e3s,e3t)
-
-      --self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("explosion"),e3s,e3t)
-      --self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("explosion"),e2s,e2t)
-      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("hit"),e1s,e1t)
-      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("hit"),e2s,e2t)
-      self:createHit(x,y,math.random()*2*math.pi,self.rm:getImg("hit"),e3s,e3t)
+      local img = self.rm:getImg("hit")
+      self:createHit(x,y,math.random()*2*math.pi,img,e1s,e1t)
+      self:createHit(x,y,math.random()*2*math.pi,img,e2s,e2t)
+      self:createHit(x,y,math.random()*2*math.pi,img,e3s,e3t)
 end
 
 function Factory:getLayer(o,l)
