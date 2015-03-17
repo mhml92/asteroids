@@ -1,5 +1,5 @@
 local class = require 'middleclass/middleclass'
-
+local vector = require 'hump/vector-light'
 local ObjectManager = class('ObejctManager')
 
 function ObjectManager:initialize(gs)
@@ -32,10 +32,12 @@ function ObjectManager:drawAll()
    --sort draw order
    table.sort(self.gameObjects,function(a,b)return a.att["layer"]<b.att["layer"] end)
    -- draw dat shjjjiiiaaat
+    
    for k,v in pairs(self.gameObjects) do
       v:draw()
    end
 end
+
 
 function ObjectManager:insert(o)
   

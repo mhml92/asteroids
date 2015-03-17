@@ -8,6 +8,7 @@ end
 function AstroidExit:update(p) 
    local r = p.trans.r+(((math.random()*2)-1)*math.pi/2)
    local health = p.att["startHealth"]
+   p.gs.cammgr:shake(0.8,5+self.level*5)
    if self.level > 1 then
      
       local unit,unith1,unith3toR,posxA,posyA,posxB,posyB,rot,rotA,rotB,nsize,nlevel

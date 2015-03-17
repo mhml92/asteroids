@@ -3,6 +3,7 @@ local Factory           = require 'Factory'
 local GameObject        = require 'GameObject'
 local ResMgr            = require 'ResourceManager'
 local ObjectManager     = require 'ObjectManager'
+local CameraManager            = require "CameraManager"
 
 local GameState = class('GameState')
 
@@ -19,14 +20,14 @@ local Chaser             = require 'AI/basic/Chaser'
 local AIStarter         = require 'AI/AIstarter/AIStarter'
 
 
-local Camera = require "hump/camera"
 
 function GameState:initialize()
    self.hello = "yo gabba gabba"
    
-   self.resmgr = ResMgr:new(self)
-   self.objmgr = ObjectManager:new(self)
-   self.factory = Factory:new(self,self.resmgr)
+   self.resmgr    = ResMgr:new(self)
+   self.objmgr    = ObjectManager:new(self)
+   self.factory   = Factory:new(self,self.resmgr)
+   self.cammgr    = CameraManager:new(self)
    
    self.world = love.physics.newWorld(0,0,true)
    self.world:setCallbacks(
@@ -35,10 +36,7 @@ function GameState:initialize()
       preSolve,
       postSolve)
    
-   self.cam = Camera(0,0)
-   
    self:loadImages()
-   
    
    self:startGame()
    
@@ -97,12 +95,12 @@ function GameState:update(dt)
       cpos.x = 0
       cpos.y = 0
    end
-   self.cam:lookAt(cpos.x,cpos.y)
+   self.cammgr:update(cpos.x,cpos.y)
 end
 
 function GameState:draw()
    love.graphics.setBackgroundColor(34,34,38)
-   self.cam:attach()
+   self.cammgr:attach()
    local bgpos = nil
    if self.objmgr.players[1] ~= nil then
       bgpos = self.objmgr.players[1].trans
@@ -113,7 +111,7 @@ function GameState:draw()
    end
    self:drawBackground(bgpos.x,bgpos.y)
    self.objmgr:drawAll()
-   self.cam:detach()
+   self.cammgr:detach()
 end
 
 -- collision callbacks
@@ -136,7 +134,7 @@ end
 
 
 function GameState:drawBackgroundLayer(x,y,img,distance)
-   
+  
    if distance == 0 then
       distance = 0.000001
    end
@@ -144,6 +142,11 @@ function GameState:drawBackgroundLayer(x,y,img,distance)
    local x1,y1 = math.floor(x/w), math.floor(y/h)
    local dx,dy = (x/distance) % w,(y/distance) % h   
    local offx,offy = (x % w)-dx,(y % h)-dy
+   
+   -- a % n == a - (n * int(a/n)).
+   -- unrolled dx,dy,offx,offy
+   --local offx,offy = (x-(w*x1))-dx,(y-(h*y1))-dy 
+
 
    local Xc,Yc = (x1*w)+offx, (y1*h)+offy
    local wh,hh = w/2,h/2

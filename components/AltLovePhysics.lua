@@ -1,13 +1,15 @@
 local class = require 'middleclass/middleclass'
+local vector = require 'hump/vector-light'
 local LovePhysics = class('Physics')
 
-function LovePhysics:initialize(p,mass,force,radius,ldamping)
+function LovePhysics:initialize(p,mass,force,radius,ldamping,maxspeed)
 
    self.p = p
    self.mass = mass
    self.force = force
    self.radius = radius
    self.ldamping = ldamping 
+   self.maxspeed = maxspeed
 
    self.body = love.physics.newBody(p.gs.world,p.trans.x,p.trans.y,"dynamic") 
    self.shape = love.physics.newCircleShape(self.radius)
@@ -20,7 +22,7 @@ function LovePhysics:initialize(p,mass,force,radius,ldamping)
    self.body:setLinearDamping(self.ldamping)
 
    -- EXPERIMENTAL
-   self.turnspeed = (2*math.pi)/60 
+   self.turnspeed = (2*math.pi)/(90) 
    self.turnmomentum = 0 
 end
 
@@ -49,6 +51,10 @@ function LovePhysics:update()
       if moveForce >= 0 then 
          self.body:setLinearDamping(self.ldamping)
          self.body:applyForce(math.cos(p.trans.r) * moveForce*self.force, math.sin(p.trans.r) * moveForce*self.force)
+         if(vector.len(self.body:getLinearVelocity()) > self.maxspeed) then
+            local nx,ny = vector.normalize(self.body:getLinearVelocity())
+            self.body:setLinearVelocity(nx*self.maxspeed,ny*self.maxspeed)
+         end
       else 
          self.body:setLinearDamping(self.ldamping+3*math.abs( p.controller.moveDir.acc))
       end
