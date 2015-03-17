@@ -70,6 +70,7 @@ function GameState:loadImages()
    self.resmgr:loadImg('img/bg.png',"bg")
    self.resmgr:loadImg('img/floatbg1.png',"floatbg1")
    self.resmgr:loadImg('img/floatbg2.png',"floatbg2")
+   self.resmgr:loadImg('img/floatbg3.png',"floatbg3")
    
    --self.resmgr:loadImg('img/monster.png',"astroid")
    self.resmgr:loadImg('img/hit.png','hit')
@@ -179,8 +180,9 @@ end
 function GameState:drawBackground(x,y)
    --self:drawBackgroundLayer(x,y,self.resmgr:getImg('square'),10)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('bg'),5)
+   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg2'),3.5)
    self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg1'),2.5)
-   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg2'),1)
+   self:drawBackgroundLayer(x,y,self.resmgr:getImg('floatbg3'),1)
 end
 
 function GameState:addPlayer(controller)
