@@ -27,8 +27,9 @@ function GameObject:update()
    end
    
    if #self.components > 0 then
-      for k,v in pairs(self.components) do
-         v:update(self)
+      for i = 1,#self.components do 
+      --for k,v in pairs(self.components) do
+         self.components[i]:update(self)
       end
    end
 end

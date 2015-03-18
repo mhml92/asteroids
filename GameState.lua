@@ -3,7 +3,8 @@ local Factory           = require 'Factory'
 local GameObject        = require 'GameObject'
 local ResMgr            = require 'ResourceManager'
 local ObjectManager     = require 'ObjectManager'
-local CameraManager     = require "CameraManager"
+local CameraManager     = require 'CameraManager'
+local DebugManager      = require 'DebugManager'
 
 local GameState = class('GameState')
 
@@ -26,34 +27,20 @@ function GameState:initialize()
    
    self.resmgr    = ResMgr:new(self)
    self.objmgr    = ObjectManager:new(self)
-   self.factory   = Factory:new(self,self.resmgr)
+   self.factory   = Factory:new(self)
    self.cammgr    = CameraManager:new(self)
-   
+   self.dbgmgr    = DebugManager:new(self) 
+
    self.world = love.physics.newWorld(0,0,true)
-   self.world:setCallbacks(
-      beginContact,
-      endContact,
-      preSolve,
-      postSolve)
-   
+   self.world:setCallbacks(beginContact,endContact,preSolve,postSolve)
    self:loadImages()
-   
    self:startGame()
-   
 end
 
 function GameState:startGame()
    self.objmgr:clear()
-   --self:addPlayer(AIStarter)
    --self:addPlayer(AltGamePadController)
    self:addPlayer(AltKeyboardController)
-   --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
-   --self:addPlayer(VokronAI)
-   --for i = 1,3 do
-   --   self:addEnemy(Chaser)
---   --end
-   self:addAstroids(7)
 end
 
 function GameState:loadImages()
@@ -65,14 +52,10 @@ function GameState:loadImages()
    self.resmgr:loadImg('img/shot.png',"fire")
    self.resmgr:loadImg('img/saft.png',"saft")
    self.resmgr:loadImg('img/fighter.png',"fighter")
-   --self.resmgr:loadImg('img/asteroid.png','astroid1')
-   --self.resmgr:loadImg('img/asteroid1.png','astroid2')
    self.resmgr:loadImg('img/bg.png',"bg")
    self.resmgr:loadImg('img/floatbg1.png',"floatbg1")
    self.resmgr:loadImg('img/floatbg2.png',"floatbg2")
    self.resmgr:loadImg('img/floatbg3.png',"floatbg3")
-   
-   --self.resmgr:loadImg('img/monster.png',"astroid")
    self.resmgr:loadImg('img/hit.png','hit')
    self.resmgr:loadImg('img/explosion.png','explosion')
    self.resmgr:loadImg('img/crosshair.png','cross')
@@ -80,9 +63,7 @@ function GameState:loadImages()
 end
 
 function GameState:update(dt)
-   if love.keyboard.isDown("r") then
-      self:startGame()
-   end
+   self.dbgmgr:update(dt)
    self.world:update(dt)
    
    -- update
@@ -133,48 +114,19 @@ function GameState:postSolve(a, b, coll, normalimpulse1, tangentimpulse1, normal
 
 end
 
-
 function GameState:drawBackgroundLayer(x,y,img,distance)
-  
-   if distance == 0 then
-      distance = 0.000001
-   end
-   local w,h = img:getWidth()*2,img:getHeight()*2
+   local wh,hh = img:getWidth(),img:getHeight()
+   local w,h = wh*2,hh*2
    local x1,y1 = math.floor(x/w), math.floor(y/h)
    local dx,dy = (x/distance) % w,(y/distance) % h   
    local offx,offy = (x % w)-dx,(y % h)-dy
-   
-   -- a % n == a - (n * int(a/n)).
-   -- unrolled dx,dy,offx,offy
-   --local offx,offy = (x-(w*x1))-dx,(y-(h*y1))-dy 
-
-
    local Xc,Yc = (x1*w)+offx, (y1*h)+offy
-   local wh,hh = w/2,h/2
    local X1,X2 = Xc - wh, Xc + wh
    local Y1,Y2 = Yc - hh, Yc + hh
    love.graphics.draw(img,X1,Y1,0,2,2)
    love.graphics.draw(img,X2,Y1,0,2,2)
    love.graphics.draw(img,X1,Y2,0,2,2)
    love.graphics.draw(img,X2,Y2,0,2,2)
-   --[[
-   local Xw,Xc,Xe = ((x1-1)*w)+offx, (x1*w)+offx, ((x1+1)*w)+offx
-   local Yn,Yc,Ys = ((y1-1)*h)+offy, (y1*h)+offy, ((y1+1)*h)+offy
-   --center 
-   love.graphics.draw(img,Xc,Yc,0,2,2)
-
-   --van neumann
-   love.graphics.draw(img,Xc,Yn,0,2,2)
-   love.graphics.draw(img,Xc,Ys,0,2,2)
-   love.graphics.draw(img,Xe,Yc,0,2,2)
-   love.graphics.draw(img,Xw,Yc,0,2,2)
-
-   --diagonals
-   love.graphics.draw(img,Xe,Yn,0,2,2)
-   love.graphics.draw(img,Xe,Ys,0,2,2)
-   love.graphics.draw(img,Xw,Ys,0,2,2)
-   love.graphics.draw(img,Xw,Yn,0,2,2)
-   ]]
 end
 
 function GameState:drawBackground(x,y)
@@ -188,11 +140,6 @@ end
 function GameState:addPlayer(controller)
    local w,h = love.graphics.getDimensions()
    self.factory:createPlayer(w/2,h/2,0,controller)
-end
-
-function GameState:addEnemy(controller)
-   local w,h = love.graphics.getDimensions()
-   self.factory:createEnemy(math.random()*w,math.random()*h,0,controller)
 end
 
 function GameState:addAstroids(n)

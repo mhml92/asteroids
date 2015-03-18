@@ -20,7 +20,7 @@ function Collision:handle(o,coll)
    --
    -- PROJECTILE
    --
-      if not self:hasOwnership(o) then
+      if not self:hasOwnership(o) and self.p.att["owner"] ~= o.att["owner"] then
          self.p.att["alive"] = false
          self.p.att["hit"] = true
       end

@@ -5,6 +5,10 @@ function Crosshair:initialize(img)
    self.img = img
    self.x = 0
    self.y = 0
+   self.w,self.h = self.img:getDimensions()
+
+   self.w = self.w/2
+   self.h = self.h/2
 end
 
 function Crosshair:getType()
@@ -20,8 +24,8 @@ function Crosshair:update(p)
    dir.x = dir.x/len
    dir.y = dir.y/len
    local dist = 150
-   self.x = pos.x + dist *dir.x
-   self.y = pos.y + dist *dir.y
+   self.x = (pos.x + dist *dir.x)-self.w
+   self.y = (pos.y + dist *dir.y)-self.h
 
 end
 

@@ -27,9 +27,9 @@ local AltLovePhysics          = require 'components/AltLovePhysics'
 
 local Factory = class('Factory')
 
-function Factory:initialize(gs,rm)
+function Factory:initialize(gs)
    self.gs = gs
-   self.rm = rm
+   self.rm = self.gs.resmgr
    self.id = 0
    self.layers = {}
    self.layers.depth = 100
@@ -63,12 +63,13 @@ function Factory:createPlayer(x,y,r,controller)
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
    --p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING,MAXSPEED
-   p:addComponent(AltLovePhysics:new(p,15,25000,SIZE/2,0.5,1000))
+   p:addComponent(AltLovePhysics:new(p,15,30000,SIZE/2,0.5,800))
    
    p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
 
    -- COOLDOWN, FORCE
    p:addComponent(BasicWeapon:new(20,0))
+   --p:addComponent(Shotgun:new(40,0))
    --p:addComponent(Shotgun:new(40,0))
    
    p:addComponent(PlayerExit:new(p)) 

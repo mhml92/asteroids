@@ -10,6 +10,8 @@ local self = {}
 function love.load()
    love.mouse.setVisible(false)
    local w,h = love.graphics.getDimensions()
+   love.graphics.setScissor( 0, 0, w, h)
+   
    self.gs = GameState:new()
 end
 
