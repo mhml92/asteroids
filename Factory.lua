@@ -5,9 +5,11 @@ local Collision               = require 'components/Collision'
 local LovePhysics             = require 'components/LovePhysics'
 local LoveProjectilePhysics   = require 'components/LoveProjectilePhysics'
 local LoveAsteroidPhysics     = require 'components/LoveAsteroidPhysics'
+local LovePlanetPhysics       = require 'components/LovePlanetPhysics'
 
 local Transformation          = require 'components/Transformation'
 local Graphics                = require 'components/Graphics'
+local DebugGraphics           = require 'components/DebugGraphics'
 
 -- WEAPONS
 local BasicWeapon             = require 'components/weapons/BasicWeapon'
@@ -20,8 +22,8 @@ local ShotExit                = require 'components/ShotExit'
 local AstroidExit             = require 'components/AstroidExit'
 local PlayerExit              = require 'components/PlayerExit'
 local Crosshair               = require 'components/effects/crosshair'
-
-
+local PlanetShadow            = require 'components/effects/PlanetShadow'
+local PlanetGravity           = require 'components/PlanetGravity'
 local AltLovePhysics          = require 'components/AltLovePhysics'
 
 
@@ -34,9 +36,10 @@ function Factory:initialize(gs)
    self.layers = {}
    self.layers.depth = 100
 
-   self.layers.player = 500
-   self.layers.default  = 300
-   self.layers.projectile = 100
+   self.layers.player = 700
+   self.layers.default  = 500
+   self.layers.projectile = 300
+   self.layers.planet = 100
    self.layers.background = 0
    self.layers.hit = 1000
 end
@@ -45,13 +48,13 @@ function Factory:createPlayer(x,y,r,controller)
    local SIZE = 40
    
    local p = self:newGameObject()
-  
 
    p.att["alive"] =  true
    p.att["health"] =  3
    p.att["damage"] =  10
    p.att["type"] =  "player"
    p.att["layer"] = self:getLayer(p,self.layers.player)
+   p.att["size"] = SIZE
    
    p:addComponent(controller:new(p))
    p:addComponent(Transformation:new(x,y,r))
@@ -63,14 +66,12 @@ function Factory:createPlayer(x,y,r,controller)
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING
    --p:addComponent(LovePhysics:new(p,10,10000,SIZE/2,1))
    -- PARENT, MASS, FORCE, RADIUS,LINEAR DAMPING,MAXSPEED
-   p:addComponent(AltLovePhysics:new(p,15,30000,SIZE/2,0.5,800))
-   
-   p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),SIZE))
+   p:addComponent(AltLovePhysics:new(p,20,35000,p.att["size"]/2,0,800))
+   p:addComponent(PlanetGravity:new(p)) 
+   p:addComponent(Graphics:new(p,self.rm:getImg("spaceship"),p.att["size"]))
 
    -- COOLDOWN, FORCE
-   p:addComponent(BasicWeapon:new(20,0))
-   --p:addComponent(Shotgun:new(40,0))
-   --p:addComponent(Shotgun:new(40,0))
+   p:addComponent(BasicWeapon:new(p,20,0))
    
    p:addComponent(PlayerExit:new(p)) 
    p:addComponent(Crosshair:new(self.rm:getImg("cross")))
@@ -80,15 +81,22 @@ end
 
 function Factory:createAstroid(x,y,r,size,health,level)
    local s = self:newGameObject()
-   local as = nil
+   local as = {}
+   --if level == 3 then level = 2 end
    if level == 3 then
-      as = self.rm:getImg("asteroid3")
+      as.img = self.rm:getImg("asteroid3")
+      as.speed = 128000*(500/800)
+      as.mass = 500
    elseif level == 2 then
-      as = self.rm:getImg("asteroid2")
+      as.img = self.rm:getImg("asteroid2")
+      as.speed = 64000
+      as.mass = 320
    elseif level == 1 then
-      as = self.rm:getImg("asteroid1")
+      as.img = self.rm:getImg("asteroid1")
+      as.speed = 32000
+      as.mass = 160
    end
-   size = 2*as:getWidth()
+   size = 2*as.img:getWidth()
    
    s.att["type"] = "astroid"
    s.att["alive"] = true
@@ -98,14 +106,39 @@ function Factory:createAstroid(x,y,r,size,health,level)
    s.att["layer"] = self:getLayer(s,self.layers.default)
    s.att["size"] = size
    
+   s:addComponent(PlanetGravity:new(s)) 
    s:addComponent(Collision:new(s))
    s:addComponent(Transformation:new(x,y,r))
    s:addComponent(ShotController:new(r))
    --PARENT,MASS,SPEED,RADIUS,RESTITUTION
-   s:addComponent(LoveAsteroidPhysics:new(s,size*25,size/3 * 10000,(size-5)/2),1)
+   s:addComponent(LoveAsteroidPhysics:new(s,as.mass,as.speed,(size-5)/2,1))
    s:addComponent(AstroidExit:new(level))
-   s:addComponent(Graphics:new(s,as,size))
+   s:addComponent(Graphics:new(s,as.img,size))
    self:insert(s) 
+end
+
+function Factory:createPlanet(x,y,r,size)
+   local p = self:newGameObject()
+   p.att["type"] = "planet"
+   p.att["damage"] = 10
+   p.att["alive"] = true
+   p.att["size"] = size
+   p.att["layer"] = self:getLayer(p,self.layers.planet)
+   p.att["gravity"] = 125000 
+   p.att["gravityradius"] = 500 
+   p.att["friction"] = 10
+
+   p:addComponent(Transformation:new(x,y,r))
+   p:addComponent(Collision:new(p))
+
+
+   --PARENT,MASS,SPEED,RADIUS,RESTITUTION
+   p:addComponent(LovePlanetPhysics:new(p,999999999,0,p.att["size"],0))
+   p:addComponent(PlanetShadow:new(p,self.rm:getImg("pshadow")))
+   p:addComponent(Graphics:new(p,self.gs.resmgr:getImg("ptest2"),p.att["size"]*4))
+   p.graphics:addBackgound(self.gs.resmgr:getImg("grav"))
+   --p:addComponent(DebugGraphics:new(p))
+   self:insert(p)
 end
 
 function Factory:createProjectile(x,y,r,damage,img,size,owner)

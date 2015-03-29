@@ -19,9 +19,9 @@ end
 
 function GameObject:update()
    if self.controller ~= nil then
-      self.controller:update(self)
+      --self.controller:update(self)
    end
-   
+
    if self.physics ~= nil then
       self.physics:update(self) 
    end
@@ -37,7 +37,7 @@ end
 function GameObject:draw()
 
    for i = #self.drawList, 1,-1 do
-      self.drawList[i]:draw(self)
+      self.drawList[i]:draw()
    end
 end
 

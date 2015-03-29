@@ -35,8 +35,8 @@ function CameraManager:detach()
 end
 
 function CameraManager:shake(rate,strength)
-   self.rate = rate
-   self.shakeStrength = strength
+   self.rate = math.max(rate,self.rate)
+   self.shakeStrength = math.max(strength,self.shakeStrength)
 end
 
 

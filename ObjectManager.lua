@@ -8,6 +8,7 @@ function ObjectManager:initialize(gs)
    self.players = {}
    self.astroids = {}
    self.projectiles = {}
+   self.planets = {}
 end
 
 function ObjectManager:clear()
@@ -52,6 +53,10 @@ function ObjectManager:insert(o)
    if o.att["type"] == "astroid" then
       table.insert(self.astroids,o)
    end
+
+   if o.att['type'] == "planet" then
+      table.insert(self.planets,o)
+   end
   
    table.insert(self.gameObjects,o) 
 end
@@ -81,11 +86,16 @@ function ObjectManager:destroy(i)
       end
    end
    
+   if self.gameObjects[i].att["type"] == "planet" then
+      for j = #self.planets, 1,-1 do
+         if self.planets[j].id == self.gameObjects[i].id then
+            table.remove(self.planets,j)
+         end
+      end
+   end
 
    if self.gameObjects[i].physics ~= nil then
       if self.gameObjects[i].physics.body ~= nil then
-         --self.gameObjects[i].physics.fixture:destroy()
-         --self.gameObjects[i].physics.shape:destroy()
          self.gameObjects[i].physics.body:destroy()
       end
    end
@@ -97,11 +107,16 @@ function ObjectManager:beginContact(a,b,coll)
    local o1, o2
    o1 = a:getUserData()
    o2 = b:getUserData()
-   o1.collision:handle(o2,coll)
-   o2.collision:handle(o1,coll)
+   o1.collision:handleBegin(o2,coll)
+   o2.collision:handleBegin(o1,coll)
 end
 
 function ObjectManager:endContact(a,b,coll)
+   local o1, o2
+   o1 = a:getUserData()
+   o2 = b:getUserData()
+   o1.collision:handleEnd(o2,coll)
+   o2.collision:handleEnd(o1,coll)
 end
 
 function ObjectManager:preSolve(a,b,coll)

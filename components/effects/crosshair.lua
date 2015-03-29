@@ -19,13 +19,10 @@ function Crosshair:update(p)
    local pos = {}
    pos.x = p.trans.x
    pos.y = p.trans.y
-   local dir = p.controller.shootDir
-   local len = math.sqrt(dir.x^2 + dir.y^2)
-   dir.x = dir.x/len
-   dir.y = dir.y/len
+   pos.r = p.trans.r
    local dist = 150
-   self.x = (pos.x + dist *dir.x)-self.w
-   self.y = (pos.y + dist *dir.y)-self.h
+   self.x = (pos.x + dist *math.cos(pos.r))-self.w
+   self.y = (pos.y + dist *math.sin(pos.r))-self.h
 
 end
 

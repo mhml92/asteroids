@@ -1,7 +1,7 @@
 local class = require 'middleclass/middleclass'
-local LoveAsteroidPhysics = class('LoveAsteroidPhysics')
+local LovePlanetPhysics = class('LovePlanetPhysics')
 
-function LoveAsteroidPhysics:initialize(p,mass,speed,radius,restitution)
+function LovePlanetPhysics:initialize(p,mass,speed,radius,restitution)
 
    self.p = p
    self.mass = mass
@@ -9,24 +9,25 @@ function LoveAsteroidPhysics:initialize(p,mass,speed,radius,restitution)
    self.radius = radius
    self.restitution = restitution
 
-   self.body = love.physics.newBody(p.gs.world,p.trans.x,p.trans.y,"dynamic") 
+   self.body = love.physics.newBody(p.gs.world,p.trans.x,p.trans.y,"static") 
    self.shape = love.physics.newCircleShape(self.radius)
    self.fixture = love.physics.newFixture(self.body,self.shape)
    self.fixture:setUserData(self.p)
    self.body:resetMassData()
    self.body:setMass(self.mass)
-   self.body:setAngularVelocity(math.random()*math.pi)
-   local x,y = math.cos(p.trans.r),math.sin(p.trans.r)
-   self.body:applyLinearImpulse(x*speed,y*speed)
+   self.body:setFixedRotation(true)
+   --local x,y = math.cos(p.trans.r),math.sin(p.trans.r)
+   --self.body:applyLinearImpulse(x*speed,y*speed)
    self.fixture:setRestitution(restitution)
+   --self.fixture:setFriction(99991)
    
 end
 
-function LoveAsteroidPhysics:getType()
+function LovePlanetPhysics:getType()
    return 'Physics'
 end
 
-function LoveAsteroidPhysics:update(p)
+function LovePlanetPhysics:update(p)
   -- local p = self.p
   --[[ 
    if p.controller ~= nil then
@@ -41,23 +42,23 @@ function LoveAsteroidPhysics:update(p)
    end
    ]]
    -- update transformation
-   p.trans.r = self.body:getAngle()
-   p.trans.x, p.trans.y = self.body:getPosition()
+   --p.trans.r = self.body:getAngle()
+   --p.trans.x, p.trans.y = self.body:getPosition()
    
 end
 
-function LoveAsteroidPhysics:getSpeed()
+function LovePlanetPhysics:getSpeed()
    local vx,vy = self.body:getLinearVelocity()
    return math.sqrt(vx^2+vy^2)
 end
 
 
-function LoveAsteroidPhysics:applyForce(x,y)
+function LovePlanetPhysics:applyForce(x,y)
    self.body:applyForce(x,y)
 end
 
-function LoveAsteroidPhysics:applyLinearImpulse(x,y)
+function LovePlanetPhysics:applyLinearImpulse(x,y)
    self.body:applyLinearImpulse(x,y)
 end
 
-return LoveAsteroidPhysics
+return LovePlanetPhysics

@@ -39,8 +39,11 @@ end
 
 function GameState:startGame()
    self.objmgr:clear()
-   --self:addPlayer(AltGamePadController)
-   self:addPlayer(AltKeyboardController)
+   self:addPlayer(AltGamePadController)
+   --self:addPlayer(AltKeyboardController)
+   --self:addPlayer(AIStarter)
+   self.factory:createPlanet(-200,-200,math.pi/2,200)
+   --self.factory:createPlanet(1500,0,0,200)
 end
 
 function GameState:loadImages()
@@ -60,6 +63,11 @@ function GameState:loadImages()
    self.resmgr:loadImg('img/explosion.png','explosion')
    self.resmgr:loadImg('img/crosshair.png','cross')
    self.resmgr:loadImg('img/square.png','square')
+   self.resmgr:loadImg('img/planet/test.png','ptest')
+   self.resmgr:loadImg('img/planet/grav.png','grav')
+   self.resmgr:loadImg('img/planet/planet.png','ptest2')
+   self.resmgr:loadImg('img/planet/planet2.png','ptest3')
+   self.resmgr:loadImg('img/planet/shadow.png','pshadow')
 end
 
 function GameState:update(dt)

@@ -9,6 +9,8 @@ function AstroidExit:update(p)
    local r = p.trans.r+(((math.random()*2)-1)*math.pi/2)
    local health = p.att["startHealth"]
    p.gs.cammgr:shake(0.8,5+self.level*5)
+   local asize = p.att["size"]
+   p.gs.factory:createExplosion(p.trans.x,p.trans.y,asize*2,15,asize*1.5,10,asize,5)
    if self.level > 1 then
      
       local unit,unith1,unith3toR,posxA,posyA,posxB,posyB,rot,rotA,rotB,nsize,nlevel
@@ -38,8 +40,7 @@ function AstroidExit:update(p)
       nlevel = self.level-1
       p.gs.factory:createAstroid(posxA,posyA,rotA,nsize,health,nlevel)
       p.gs.factory:createAstroid(posxB,posyB,rotB,nsize,health,nlevel)
-      local asize = p.att["size"]
-      p.gs.factory:createExplosion(p.trans.x,p.trans.y,asize*1.5,15,asize*1.25,10,asize,5)
+      --p.gs.factory:createExplosion(p.trans.x,p.trans.y,asize*2,15,asize*1.5,10,asize,5)
    end
 end
 

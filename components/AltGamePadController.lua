@@ -14,6 +14,55 @@ function AltGamePadController:getType()
    return 'Controller'
 end
 
+
+function AltGamePadController:isShooting()
+   return self.j:isGamepadDown("rightshoulder");
+end
+
+function AltGamePadController:getAcceleration()
+   local acc = 0
+   acc = -self.j:getGamepadAxis("lefty")
+   return acc
+end
+
+function AltGamePadController:getTurn()
+   local turn = 0
+   turn = self.j:getGamepadAxis("rightx")
+   return turn  
+end
+
+function AltGamePadController:boost()
+   if self.j:getGamepadAxis("triggerright") > 0 then
+      return true
+   else 
+      return false
+   end
+
+end
+
+--[[
+function AltGamePadController:getMoveDir()
+   local dir = {}
+   dir.turn = 0.0
+   dir.acc = 0.0
+   --move
+
+   if love.keyboard.isDown("up")then
+      dir.acc = dir.acc + 1
+   end
+   if love.keyboard.isDown("down")then
+      dir.acc = dir.acc - 1
+   end
+   if love.keyboard.isDown("left")then
+      dir.turn = dir.turn - 1
+   end
+   if love.keyboard.isDown("right")then
+      dir.turn = dir.turn + 1
+   end
+   return dir  
+end
+]]
+--[[
 function AltGamePadController:update() 
    self.moveDir = self:getMoveDir()
    self.shootDir = self:getShootDir()
@@ -40,5 +89,5 @@ function AltGamePadController:getShootDir()
    dir.y = math.sin(self.p.trans.r)--self.j:getGamepadAxis("righty")
    return dir  
 end
-
+]]
 return AltGamePadController

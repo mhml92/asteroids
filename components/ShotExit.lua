@@ -13,7 +13,7 @@ function ShotExit:update(p)
       p.trans.y,
       math.random()*2*math.pi,
       p.gs.resmgr:getImg("hit"), --sprite
-      20, --size
+      40, --size
       5 --time
       )
    end
