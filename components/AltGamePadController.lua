@@ -20,6 +20,7 @@ function AltGamePadController:isShooting()
 end
 
 function AltGamePadController:getAcceleration()
+ 
    local acc = 0
    acc = -self.j:getGamepadAxis("lefty")
    return acc
@@ -33,11 +34,14 @@ end
 
 function AltGamePadController:boost()
    if self.j:getGamepadAxis("triggerright") > 0 then
-      return true
-   else 
-      return false
+      return 0
+   --elseif self.j:isGamepadDown("dpleft") then
+   --   return -1
+   --elseif self.j:isGamepadDown("dpright") then
+    --  return 1
+   else
+      return -2
    end
-
 end
 
 --[[

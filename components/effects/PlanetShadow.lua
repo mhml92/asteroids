@@ -31,7 +31,7 @@ function PlanetShadow:drawList(objList)
       local dist = vector.dist(self.x,self.y,ot.x,ot.y)
       local psize = self.p.att["size"]
       deltaDist = (dist-psize)-objList[i].att["size"]/2 
-      if deltaDist < 175 then
+      if deltaDist < 500 then
          local scale = objList[i].graphics.img:getWidth()*2/(self.img:getWidth()) 
          local dx,dy = ((ot.x)-self.x),((ot.y)-self.y)        
          dx,dy = vector.normalize(dx,dy)

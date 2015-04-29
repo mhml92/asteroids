@@ -20,7 +20,7 @@ function LoveProjectilePhysics:getType()
    return 'Physics'
 end
 
-function LoveProjectilePhysics:update(p)
+function LoveProjectilePhysics:update()
   -- local p = self.p
   --[[ 
    if p.controller ~= nil then
@@ -36,7 +36,7 @@ function LoveProjectilePhysics:update(p)
    
    -- update transformation
    ]]
-   p.trans.x, p.trans.y = self.body:getPosition()
+   self.p.trans.x, self.p.trans.y = self.body:getPosition()
 end
 
 function LoveProjectilePhysics:applyForce(x,y)

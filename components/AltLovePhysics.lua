@@ -56,8 +56,8 @@ function LovePhysics:update()
 
       end
 
-
-      if self.p.controller:boost() and not self.currentlyBoosting and self.cooldown == 0 then
+      local boost = self.p.controller:boost()
+      if boost > -2 and not self.currentlyBoosting and self.cooldown == 0 then
          local asize = self.p.att["size"]
          self.p.gs.factory:createExplosion(self.p.trans.x,self.p.trans.y,asize*2,20,asize*1.5,15,asize,10)
          self.p.gs.cammgr:shake(0.9,7)
@@ -65,7 +65,8 @@ function LovePhysics:update()
          self.boostingTime = 10
          self.cooldown = 60
          self.maxspeed = self.old_maxspeed*1.5
-         self:applyLinearImpulse(math.cos(self.p.trans.r)*16000,math.sin(self.p.trans.r)*16000)
+         local rot = self.p.trans.r + boost*math.pi/2
+         self:applyLinearImpulse(math.cos(rot)*16000,math.sin(rot)*16000)
       end
       
       

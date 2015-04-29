@@ -26,23 +26,10 @@ function LoveAsteroidPhysics:getType()
    return 'Physics'
 end
 
-function LoveAsteroidPhysics:update(p)
-  -- local p = self.p
-  --[[ 
-   if p.controller ~= nil then
-      if p.controller.moveDir.x ~= 0 or p.controller.moveDir.y ~= 0 then 
-         
-         md = p.controller.moveDir
-         local x,y = self.body:getPosition()
-         self.body:setX(x+md.x*self.speed)
-         self.body:setY(y+md.y*self.speed)
-
-      end
-   end
-   ]]
+function LoveAsteroidPhysics:update()
    -- update transformation
-   p.trans.r = self.body:getAngle()
-   p.trans.x, p.trans.y = self.body:getPosition()
+   self.p.trans.r = self.body:getAngle()
+   self.p.trans.x, self.p.trans.y = self.body:getPosition()
    
 end
 
